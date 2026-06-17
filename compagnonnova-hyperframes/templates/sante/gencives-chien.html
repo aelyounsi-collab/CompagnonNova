@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Les gencives de votre chien — CompagnonNova</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy:  #0B0F1A;
+    --gold:  #C9A84C;
+    --white: #FFFFFF;
+    --red:   #E63946;
+    --gray:  #8892A4;
+  }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: var(--navy);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Fond dégradé ── */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 50% 30%, rgba(201,168,76,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 400px at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 60%);
+  }
+
+  /* ── Ligne dorée top ── */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    animation: fadeIn 0.5s 0.2s forwards;
+  }
+
+  /* ── Logo / marque ── */
+  .brand {
+    position: absolute;
+    top: 80px; left: 0; right: 0;
+    text-align: center;
+    opacity: 0;
+    animation: slideDown 0.6s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .brand-name {
+    font-size: 38px;
+    font-weight: 300;
+    letter-spacing: 10px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .brand-tagline {
+    font-size: 20px;
+    color: var(--gray);
+    letter-spacing: 3px;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── Séparateur ── */
+  .divider {
+    position: absolute;
+    top: 210px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 2px;
+    background: var(--gold);
+    opacity: 0;
+    animation: fadeIn 0.4s 0.8s forwards;
+  }
+
+  /* ── Badge urgence ── */
+  .badge-urgence {
+    position: absolute;
+    top: 250px; left: 50%; transform: translateX(-50%);
+    background: var(--red);
+    color: var(--white);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 10px 32px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: slideDown 0.5s 1.0s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  /* ── Question principale ── */
+  .question-block {
+    position: absolute;
+    top: 360px; left: 80px; right: 80px;
+    opacity: 0;
+    animation: slideUp 0.7s 1.3s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .question-label {
+    font-size: 24px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .question-text {
+    font-size: 72px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .question-text em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* ── Emoji central ── */
+  .emoji-central {
+    position: absolute;
+    top: 760px; left: 50%; transform: translateX(-50%);
+    font-size: 160px;
+    opacity: 0;
+    animation: popIn 0.6s 2.0s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+
+  /* ── Signes d'alerte ── */
+  .signes-block {
+    position: absolute;
+    top: 960px; left: 60px; right: 60px;
+    opacity: 0;
+    animation: slideUp 0.6s 2.4s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .signes-title {
+    font-size: 26px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .signe-item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 22px 28px;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.04);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    opacity: 0;
+    animation: slideRight 0.5s forwards;
+  }
+  .signe-item:nth-child(2) { animation-delay: 2.7s; }
+  .signe-item:nth-child(3) { animation-delay: 2.9s; }
+  .signe-item:nth-child(4) { animation-delay: 3.1s; }
+  .signe-item:nth-child(5) { animation-delay: 3.3s; }
+  .signe-icon { font-size: 36px; min-width: 48px; }
+  .signe-text { font-size: 34px; color: var(--white); font-weight: 500; line-height: 1.2; }
+  .signe-text span { color: var(--red); font-weight: 700; }
+
+  /* ── Message alerte ── */
+  .alerte-msg {
+    position: absolute;
+    top: 1520px; left: 60px; right: 60px;
+    background: rgba(230,57,70,0.12);
+    border: 1px solid rgba(230,57,70,0.4);
+    border-radius: 12px;
+    padding: 32px 36px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.6s 3.6s forwards;
+  }
+  .alerte-msg p {
+    font-size: 34px;
+    color: var(--white);
+    line-height: 1.5;
+  }
+  .alerte-msg strong { color: var(--red); }
+
+  /* ── Sous-titres dynamiques ── */
+  .subtitle-track {
+    position: absolute;
+    bottom: 240px; left: 40px; right: 40px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.5s 4.2s forwards;
+  }
+  .subtitle-word {
+    display: inline-block;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--white);
+    background: rgba(11,15,26,0.85);
+    padding: 6px 12px;
+    margin: 4px;
+    border-radius: 4px;
+    line-height: 1.4;
+  }
+  .subtitle-word.highlight { color: var(--gold); }
+
+  /* ── CTA Final ── */
+  .cta-block {
+    position: absolute;
+    bottom: 80px; left: 60px; right: 60px;
+    text-align: center;
+    opacity: 0;
+    animation: slideUp 0.7s 4.5s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .cta-follow {
+    font-size: 30px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .cta-handle {
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .cta-line {
+    width: 80px; height: 3px;
+    background: var(--gold);
+    margin: 20px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeIn    { to { opacity: 1; } }
+  @keyframes slideDown { from { opacity:0; transform: translateY(-30px); } to { opacity:1; transform: translateY(0); } }
+  @keyframes slideUp   { from { opacity:0; transform: translateY(40px);  } to { opacity:1; transform: translateY(0); } }
+  @keyframes slideRight{ from { opacity:0; transform: translateX(-30px); } to { opacity:1; transform: translateX(0); } }
+  @keyframes popIn     { from { opacity:0; transform: translateX(-50%) scale(0.5); } to { opacity:1; transform: translateX(-50%) scale(1); } }
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="top-bar"></div>
+
+<!-- Marque -->
+<div class="brand">
+  <div class="brand-name">CompagnonNova</div>
+  <div class="brand-tagline">Santé animale · Chiens &amp; Chats</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Badge -->
+<div class="badge-urgence">⚠️ Signe d'alerte</div>
+
+<!-- Question -->
+<div class="question-block">
+  <div class="question-label">Le saviez-vous ?</div>
+  <div class="question-text">
+    Les <em>gencives</em> de votre chien peuvent révéler une <em>maladie grave</em>
+  </div>
+</div>
+
+<!-- Emoji -->
+<div class="emoji-central">🐾</div>
+
+<!-- Signes cliniques -->
+<div class="signes-block">
+  <div class="signes-title">Gencives anormales = danger</div>
+
+  <div class="signe-item">
+    <div class="signe-icon">⬜</div>
+    <div class="signe-text">Blanches ou pâles → <span>anémie, hémorragie</span></div>
+  </div>
+  <div class="signe-item">
+    <div class="signe-icon">💛</div>
+    <div class="signe-text">Jaunes → <span>problème hépatique</span></div>
+  </div>
+  <div class="signe-item">
+    <div class="signe-icon">🔵</div>
+    <div class="signe-text">Bleues ou violettes → <span>manque d'oxygène URGENT</span></div>
+  </div>
+  <div class="signe-item">
+    <div class="signe-icon">🔴</div>
+    <div class="signe-text">Rouge vif ou marron → <span>septicémie possible</span></div>
+  </div>
+</div>
+
+<!-- Message alerte -->
+<div class="alerte-msg">
+  <p>Gencives normales = <strong>roses et humides</strong><br>
+  Si une couleur anormale persiste &gt; 30 min → <strong>vétérinaire immédiatement</strong></p>
+</div>
+
+<!-- Sous-titres dynamiques -->
+<div class="subtitle-track">
+  <span class="subtitle-word">Vérifiez</span>
+  <span class="subtitle-word highlight">chaque semaine</span>
+  <span class="subtitle-word">les gencives</span>
+  <span class="subtitle-word">de votre</span>
+  <span class="subtitle-word highlight">compagnon</span>
+</div>
+
+<!-- CTA -->
+<div class="cta-block">
+  <div class="cta-follow">Suivez-nous pour plus de conseils</div>
+  <div class="cta-handle">@CompagnonNova</div>
+  <div class="cta-line"></div>
+</div>
+
+</body>
+</html>
