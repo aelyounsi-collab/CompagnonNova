@@ -87,6 +87,7 @@
     position: absolute;
     top: 760px; left: 50%; transform: translateX(-50%);
     font-size: 160px;
+    transform-origin: center center;
   }
   .signes-block {
     position: absolute;
@@ -221,178 +222,90 @@
 </div>
 
 <script>
-/**
- * GSAP shim — implémente les méthodes utilisées par cette composition.
- * Utilisé quand GSAP natif n'est pas injecté par HyperFrames (preview navigateur).
- * En render HyperFrames, window.gsap est fourni par le moteur.
- */
 (function () {
-  if (typeof window.gsap !== 'undefined') return; // GSAP déjà présent
+  var DURATION = 8;
+  var ID = 'gencives-chien';
 
-  var Tween = function (targets, vars, startTime) {
-    this.targets  = targets;
-    this.vars     = vars;
-    this.start    = startTime;
-    this.dur      = vars.duration || 0.5;
-    this.ease     = vars.ease || 'linear';
-    this._from    = null; // capturé au premier seek
-  };
-  Tween.prototype.apply = function (t) {
-    var p = Math.max(0, Math.min(1, (t - this.start) / this.dur));
-    var ep = easeVal(this.ease, p);
-    var targets = this.targets;
-    for (var i = 0; i < targets.length; i++) {
-      var el = targets[i];
-      if (!el) continue;
-      if (!this._from) this._from = {};
-      applyProps(el, this.vars, ep, this._from);
-    }
-  };
+  // ── Définition des keyframes par élément ──
+  // Chaque entrée : { id, startT, dur, fromY, toY, fromScale, toScale }
+  var ANIMS = [
+    { id: 'brand',     startT: 0.3, dur: 0.5, fromY: 30, toY: 0 },
+    { id: 'divider',   startT: 0.7, dur: 0.3, fromY: 30, toY: 0 },
+    { id: 'badge',     startT: 0.9, dur: 0.4, fromY: 30, toY: 0 },
+    { id: 'question',  startT: 1.2, dur: 0.6, fromY: 30, toY: 0 },
+    { id: 'emoji',     startT: 2.0, dur: 0.5, fromY: 0,  toY: 0, fromScale: 0.3, toScale: 1 },
+    { id: 'signes',    startT: 2.5, dur: 0.4, fromY: 30, toY: 0 },
+    { id: 's1',        startT: 2.7, dur: 0.35,fromY: 30, toY: 0 },
+    { id: 's2',        startT: 3.0, dur: 0.35,fromY: 30, toY: 0 },
+    { id: 's3',        startT: 3.3, dur: 0.35,fromY: 30, toY: 0 },
+    { id: 's4',        startT: 3.6, dur: 0.35,fromY: 30, toY: 0 },
+    { id: 'alerte',    startT: 4.2, dur: 0.5, fromY: 30, toY: 0 },
+    { id: 'subtitles', startT: 5.0, dur: 0.4, fromY: 30, toY: 0 },
+    { id: 'cta',       startT: 5.8, dur: 0.6, fromY: 30, toY: 0 }
+  ];
 
-  function easeVal(ease, p) {
-    if (ease === 'linear') return p;
-    // power2.out
-    return 1 - Math.pow(1 - p, 2);
-  }
+  // Cache des éléments DOM
+  var elMap = {};
+  ANIMS.forEach(function (a) {
+    elMap[a.id] = document.getElementById(a.id);
+  });
 
-  function applyProps(el, vars, p, from) {
-    var style = el.style;
-    var transform = getTransform(el);
+  // Easing power2.out
+  function easeOut(p) { return 1 - (1 - p) * (1 - p); }
 
-    if ('opacity' in vars) {
-      if (!(el._id + '_opacity' in from)) from[el._id + '_opacity'] = parseFloat(el.style.opacity) || 0;
-      style.opacity = from[el._id + '_opacity'] + (vars.opacity - from[el._id + '_opacity']) * p;
-    }
-    if ('y' in vars) {
-      if (!(el._id + '_y' in from)) from[el._id + '_y'] = transform.y;
-      var newY = from[el._id + '_y'] + (vars.y - from[el._id + '_y']) * p;
-      el._ty = newY;
-      updateTransform(el);
-    }
-    if ('scale' in vars) {
-      if (!(el._id + '_scale' in from)) from[el._id + '_scale'] = transform.scale;
-      var newS = from[el._id + '_scale'] + (vars.scale - from[el._id + '_scale']) * p;
-      el._scale = newS;
-      updateTransform(el);
-    }
-  }
+  // ── Appliquer l'état visuel au temps t ──
+  function applyTime(t) {
+    ANIMS.forEach(function (a) {
+      var el = elMap[a.id];
+      if (!el) return;
 
-  function getTransform(el) {
-    return { y: el._ty || 0, scale: el._scale !== undefined ? el._scale : 1 };
-  }
-  function updateTransform(el) {
-    var y = el._ty || 0;
-    var s = el._scale !== undefined ? el._scale : 1;
-    el.style.transform = 'translateY(' + y + 'px) scale(' + s + ')';
-  }
+      var p = (t - a.startT) / a.dur;
+      p = Math.max(0, Math.min(1, p));
+      var ep = easeOut(p);
 
-  var idCounter = 0;
-  function getTargets(sel) {
-    if (typeof sel === 'string') {
-      var nodes = document.querySelectorAll(sel);
-      var arr = [];
-      for (var i = 0; i < nodes.length; i++) {
-        if (!nodes[i]._id) nodes[i]._id = ++idCounter;
-        arr.push(nodes[i]);
+      el.style.opacity = ep;
+
+      var y = (a.fromY || 0) + ((a.toY || 0) - (a.fromY || 0)) * ep;
+      var fromS = a.fromScale !== undefined ? a.fromScale : 1;
+      var toS   = a.toScale   !== undefined ? a.toScale   : 1;
+      var s = fromS + (toS - fromS) * ep;
+
+      if (a.id === 'emoji') {
+        el.style.transform = 'translateX(-50%) scale(' + s + ')';
+      } else {
+        el.style.transform = 'translateY(' + y + 'px)';
       }
-      return arr;
-    }
-    return Array.isArray(sel) ? sel : [sel];
+    });
   }
 
-  function Timeline(opts) {
-    this.tweens   = [];
-    this.paused   = opts && opts.paused;
-    this._time    = 0;
-    this._playing = false;
-    this._raf     = null;
-    this._start   = null;
-    this.duration = 0;
-  }
-  Timeline.prototype.to = function (sel, vars, position) {
-    var t = new Tween(getTargets(sel), vars, position || 0);
-    this.tweens.push(t);
-    var end = (position || 0) + (vars.duration || 0.5);
-    if (end > this.duration) this.duration = end;
-    return this;
-  };
-  Timeline.prototype.seek = function (t) {
-    this._time = t;
-    for (var i = 0; i < this.tweens.length; i++) this.tweens[i].apply(t);
-  };
-  Timeline.prototype.play = function () {
-    if (this._playing) return this;
-    this._playing = true;
-    var self = this;
-    var startT = performance.now() - this._time * 1000;
-    function tick(now) {
-      var elapsed = (now - startT) / 1000;
-      if (elapsed >= self.duration) { self.seek(self.duration); self._playing = false; return; }
-      self.seek(elapsed);
-      self._raf = requestAnimationFrame(tick);
-    }
-    this._raf = requestAnimationFrame(tick);
-    return this;
-  };
-
-  var gsapShim = {
-    timeline: function (opts) { return new Timeline(opts); },
-    set: function (sel, vars) {
-      var targets = (Array.isArray(sel) ? sel : [sel]).reduce(function (acc, s) {
-        return acc.concat(getTargets(s));
-      }, []);
-      for (var i = 0; i < targets.length; i++) {
-        var el = targets[i];
-        if (!el) continue;
-        if ('opacity' in vars) el.style.opacity = vars.opacity;
-        if ('y' in vars) { el._ty = vars.y; updateTransform(el); }
-        if ('scale' in vars) { el._scale = vars.scale; updateTransform(el); }
-      }
-    }
-  };
-  window.gsap = gsapShim;
-})();
-</script>
-
-<script>
-(function () {
-  const DURATION = 8;
-  const FPS      = 30;
-  const ID       = 'gencives-chien';
-
-  // ── Masquer tous les éléments animés au départ ──
-  const els = ['#brand','#divider','#badge','#question','#emoji',
-                '#signes','#s1','#s2','#s3','#s4','#alerte','#subtitles','#cta'];
-  gsap.set(els, { opacity: 0, y: 30 });
-  gsap.set('#emoji', { opacity: 0, scale: 0.3, y: 0 });
-
-  // ── Timeline GSAP principale ──
-  const tl = gsap.timeline({ paused: true });
-
-  tl.to('#brand',      { opacity: 1, y: 0, duration: 0.5 }, 0.3)
-    .to('#divider',    { opacity: 1, y: 0, duration: 0.3 }, 0.7)
-    .to('#badge',      { opacity: 1, y: 0, duration: 0.4 }, 0.9)
-    .to('#question',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.2)
-    .to('#emoji',      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.0)
-    .to('#signes',     { opacity: 1, y: 0, duration: 0.4 }, 2.5)
-    .to('#s1',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 2.7)
-    .to('#s2',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.0)
-    .to('#s3',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.3)
-    .to('#s4',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.6)
-    .to('#alerte',     { opacity: 1, y: 0, duration: 0.5 }, 4.2)
-    .to('#subtitles',  { opacity: 1, y: 0, duration: 0.4 }, 5.0)
-    .to('#cta',        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 5.8);
+  // ── État initial (tout invisible) ──
+  applyTime(0);
 
   // ── Enregistrement HyperFrames ──
-  window.__timelines = window.__timelines || {};
-  window.__timelines[ID] = tl;
+  // Objet compatible avec ce qu'HyperFrames attend : { duration, seek }
+  var tlProxy = {
+    duration: function () { return DURATION; },
+    seek: function (t) { applyTime(t); },
+    // Compatibilité si HyperFrames lit .totalDuration()
+    totalDuration: function () { return DURATION; }
+  };
 
-  // ── Pilotage par HyperFrames (render frame par frame) ──
+  window.__timelines = window.__timelines || {};
+  window.__timelines[ID] = tlProxy;
+
+  // ── Pilotage HyperFrames (render frame par frame) ──
   if (typeof window.__hf !== 'undefined') {
-    window.__hf.onTimeUpdate(function (t) { tl.seek(t); });
+    window.__hf.onTimeUpdate(function (t) { applyTime(t); });
   } else {
-    // Prévisualisation navigateur : jouer normalement
-    tl.play();
+    // Prévisualisation navigateur : animation via requestAnimationFrame
+    var startTime = null;
+    function tick(now) {
+      if (!startTime) startTime = now;
+      var elapsed = (now - startTime) / 1000;
+      applyTime(Math.min(elapsed, DURATION));
+      if (elapsed < DURATION) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   }
 })();
 </script>
