@@ -59,7 +59,7 @@ $ana_videos = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
     'startDate'  => '2020-01-01',  // lifetime pour le classement global
     'endDate'    => $end,
     'dimensions' => 'video',
-    'metrics'    => 'views,estimatedMinutesWatched,impressionsClickThroughRate,averageViewPercentage',
+    'metrics'    => 'views,estimatedMinutesWatched,averageViewPercentage',
     'sort'       => '-views',
     'maxResults' => '50',
     'access_token' => $token,
@@ -93,11 +93,11 @@ if (!empty($video_ids_ranked)) {
             'title'       => $title,
             'video_id'    => $vid,
             'url'         => 'https://www.youtube.com/watch?v=' . $vid,
-            'views'       => (int)$row[1],
+            'views'       => (int)($row[1] ?? 0),
             'likes'       => $likes,
             'comments'    => $comments,
-            'ctr'         => round((float)($row[3] ?? 0) * 100, 1),
-            'retention'   => round((float)($row[4] ?? 0), 1),
+            'ctr'         => 0.0,  // CTR non dispo par vidéo via Analytics v2
+            'retention'   => round((float)($row[3] ?? 0), 1),
             'watch_hours' => round((int)($row[2] ?? 0) / 60, 1),
         ];
     }
