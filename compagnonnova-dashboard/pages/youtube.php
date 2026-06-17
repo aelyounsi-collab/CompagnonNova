@@ -97,7 +97,8 @@ page_open('YouTube Analytics', 'youtube');
           <td><?= num($v['views']) ?></td>
           <td><?= num($v['likes'] ?? 0) ?></td>
           <td><?= pct($v['ctr']) ?></td>
-          <td><?= pct($v['retention']) ?><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= min(100,$v['retention']) ?>%"></div></div></td>
+          <?php $ret = min(100, $v['retention']); ?>
+          <td><?= pct($ret) ?><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:<?= $ret ?>%"></div></div></td>
           <td><?= $v['watch_hours'] ?? 0 ?>h</td>
         </tr>
         <?php endforeach; ?>
@@ -232,7 +233,7 @@ async function syncPeriod(start, end, label) {
             <td>${numFmt(v.views)}</td>
             <td>${numFmt(v.likes)}</td>
             <td>${pctFmt(v.ctr)}</td>
-            <td>${pctFmt(v.retention)}<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${ret_w}%"></div></div></td>
+            <td>${pctFmt(ret_w)}<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${ret_w}%"></div></div></td>
             <td>${v.watch_hours}h</td>
           </tr>`;
       });
