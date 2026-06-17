@@ -1,23 +1,36 @@
-# Analytics — CompagnonNova
+# Analytics & Growth Intelligence — CompagnonNova
 
-Ce dossier centralise toutes les données de performance de CompagnonNova.
+Ce dossier centralise toutes les données de performance, rapports et recommandations de CompagnonNova.
 
-## Structure
+## Architecture
 
 ```
 analytics/
-├── youtube/
-├── tiktok/
-├── instagram/
-└── facebook/
+├── youtube/          → Analyse YouTube (vues, CTR, rétention, mots-clés...)
+├── tiktok/           → Analyse TikTok (complétion, favoris, partages...)
+├── instagram/        → Analyse Instagram (Reels, sauvegardes, portée...)
+├── facebook/         → Analyse Facebook (portée, engagement, vidéos...)
+├── growth-lab/       → Hypothèses, tests, conclusions, roadmap
+└── kpi-global.md     → Tableau de bord KPI toutes plateformes
 ```
 
-## Fichiers dans chaque dossier
+## Principe de fonctionnement
 
-- `statistiques-mensuelles.md` : KPI du mois
-- `videos-performantes.md` : Meilleures vidéos et pourquoi
-- `enseignements.md` : Ce qu'on a appris
+1. **Exports** : Les données brutes sont déposées dans `exports/`
+2. **Rapports** : Les analyses mensuelles sont dans `rapports/`
+3. **Tops** : Les meilleures performances sont documentées dans `tops-videos/`
+4. **Recommandations** : Les actions concrètes sont dans `recommandations/`
 
-## Règle d'or
+## Agents IA associés
 
-Documenter chaque mois. Les données non documentées sont perdues.
+Chaque plateforme dispose d'un agent IA dédié dans `agents/` capable d'analyser automatiquement les données exportées.
+
+Voir `/agents/` pour les spécifications complètes.
+
+## Cadence d'analyse
+
+| Fréquence | Action |
+|-----------|--------|
+| Hebdomadaire | Mise à jour KPI globaux |
+| Mensuelle | Rapport complet par plateforme |
+| Trimestrielle | Bilan growth-lab + ajustement stratégie |
