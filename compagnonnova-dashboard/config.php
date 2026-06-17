@@ -38,12 +38,13 @@ function badge_priority(string $p): string {
 
 function render_sidebar(string $active = 'home'): void {
     $links = [
-        ['href' => '../index.php',          'icon' => '📊', 'label' => 'Vue Globale',  'id' => 'home'],
-        ['href' => '../pages/youtube.php',  'icon' => '▶️',  'label' => 'YouTube',      'id' => 'youtube'],
-        ['href' => '../pages/tiktok.php',   'icon' => '🎵', 'label' => 'TikTok',       'id' => 'tiktok'],
-        ['href' => '../pages/instagram.php','icon' => '📸', 'label' => 'Instagram',    'id' => 'instagram'],
-        ['href' => '../pages/facebook.php', 'icon' => '👥', 'label' => 'Facebook',     'id' => 'facebook'],
-        ['href' => '../pages/growth.php',   'icon' => '🚀', 'label' => 'Growth Lab',   'id' => 'growth'],
+        ['href' => '../index.php',          'icon' => '📊', 'label' => 'Vue Globale',    'id' => 'home'],
+        ['href' => '../pages/youtube.php',  'icon' => '▶️',  'label' => 'YouTube',        'id' => 'youtube'],
+        ['href' => '../pages/tiktok.php',   'icon' => '🎵', 'label' => 'TikTok',         'id' => 'tiktok'],
+        ['href' => '../pages/instagram.php','icon' => '📸', 'label' => 'Instagram',      'id' => 'instagram'],
+        ['href' => '../pages/facebook.php', 'icon' => '👥', 'label' => 'Facebook',       'id' => 'facebook'],
+        ['href' => '../pages/growth.php',   'icon' => '🚀', 'label' => 'Growth Lab',     'id' => 'growth'],
+        ['href' => '../pages/sync.php',     'icon' => '🔄', 'label' => 'Synchronisation','id' => 'sync'],
     ];
     echo '<nav class="sidebar">';
     echo '<div class="sidebar-logo"><span class="logo-icon">🐾</span><span class="logo-text">CompagnonNova</span></div>';
