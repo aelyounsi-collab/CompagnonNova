@@ -66,7 +66,7 @@
   /* ── Badge ── */
   #badge {
     position: absolute;
-    top: 244px; left: 50%; transform: translateX(-50%);
+    top: 244px; left: 50%;
     background: var(--red); color: var(--white);
     font-size: 20px; font-weight: 700;
     letter-spacing: 3px; padding: 10px 30px;
@@ -96,7 +96,6 @@
   #icon {
     position: absolute;
     top: 740px; left: 50%;
-    transform: translateX(-50%) scale(0.4);
     font-size: 150px;
     opacity: 0;
   }
@@ -217,9 +216,9 @@ window.addEventListener('load', function () {
 
   tl.to('#brand',   { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },           0.2)
     .to('#divider', { opacity: 1, duration: 0.3 },                                      0.6)
-    .to('#badge',   { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },           0.8)
+    .fromTo('#badge', { xPercent: -50, opacity: 0, y: 20 }, { xPercent: -50, opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 0.8)
     .to('#hook',    { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },           1.1)
-    .to('#icon',    { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' },    1.9)
+    .fromTo('#icon', { xPercent: -50, opacity: 0, scale: 0.4 }, { xPercent: -50, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 1.9)
     .to('#signes',  { opacity: 1, y: 0, duration: 0.4 },                               2.4)
     .to('#s1',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           2.6)
     .to('#s2',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           2.9)
