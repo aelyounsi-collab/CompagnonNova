@@ -52,39 +52,56 @@ $subs_lost   = (int)$r[3];
 $ctr         = round((float)($r[5] ?? 0) * 100, 2);
 $retention   = round((float)($r[6] ?? 0), 1);
 
-// ── 3. Top 10 vidéos ──
-$search = api_get('https://www.googleapis.com/youtube/v3/search', [
-    'part' => 'snippet', 'forMine' => 'true', 'type' => 'video',
-    'order' => 'viewCount', 'maxResults' => '10', 'access_token' => $token,
+// ── 3. Top vidéos via Analytics (classement réel par vues sur la période) ──
+// Utilise dimensions=video pour obtenir toutes les vidéos avec métriques réelles
+$ana_videos = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
+    'ids'        => 'channel==MINE',
+    'startDate'  => '2020-01-01',  // lifetime pour le classement global
+    'endDate'    => $end,
+    'dimensions' => 'video',
+    'metrics'    => 'views,estimatedMinutesWatched,impressionsClickThroughRate,averageViewPercentage',
+    'sort'       => '-views',
+    'maxResults' => '50',
+    'access_token' => $token,
 ]);
+
+// Récupérer les IDs pour enrichir avec titres et likes via Data API
+$video_ids_ranked = array_column($ana_videos['rows'] ?? [], 0);
 $top_videos = [];
-foreach ($search['items'] ?? [] as $item) {
-    $vid = $item['id']['videoId'] ?? '';
-    if (!$vid) continue;
-    $vstat = api_get('https://www.googleapis.com/youtube/v3/videos', [
-        'part' => 'statistics', 'id' => $vid, 'access_token' => $token,
-    ]);
-    $vs = $vstat['items'][0]['statistics'] ?? [];
-    $va = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
-        'ids' => 'channel==MINE', 'startDate' => $start, 'endDate' => $end,
-        'filters' => 'video==' . $vid,
-        'metrics' => 'views,impressionsClickThroughRate,averageViewPercentage,estimatedMinutesWatched',
+
+if (!empty($video_ids_ranked)) {
+    // Batch : récupérer titres + stats en une seule requête (max 50 IDs)
+    $ids_batch = implode(',', array_slice($video_ids_ranked, 0, 50));
+    $vdata = api_get('https://www.googleapis.com/youtube/v3/videos', [
+        'part'         => 'snippet,statistics',
+        'id'           => $ids_batch,
         'access_token' => $token,
     ]);
-    $vr = $va['rows'][0] ?? [0, 0, 0, 0];
-    $top_videos[] = [
-        'title'      => $item['snippet']['title'] ?? '',
-        'video_id'   => $vid,
-        'url'        => 'https://www.youtube.com/watch?v=' . $vid,
-        'views'      => (int)($vs['viewCount'] ?? 0),
-        'likes'      => (int)($vs['likeCount']    ?? 0),
-        'comments'   => (int)($vs['commentCount'] ?? 0),
-        'ctr'        => round((float)($vr[1] ?? 0) * 100, 1),
-        'retention'  => round((float)($vr[2] ?? 0), 1),
-        'watch_hours'=> round((int)($vr[3] ?? 0) / 60, 1),
-    ];
+    // Indexer par video_id pour accès rapide
+    $vmap = [];
+    foreach ($vdata['items'] ?? [] as $vi) {
+        $vmap[$vi['id']] = $vi;
+    }
+    // Construire la liste ordonnée (ordre Analytics = ordre par vues décroissant)
+    foreach ($ana_videos['rows'] ?? [] as $row) {
+        $vid       = $row[0];
+        $vi        = $vmap[$vid] ?? null;
+        $title     = $vi['snippet']['title']          ?? '(titre indisponible)';
+        $likes     = (int)($vi['statistics']['likeCount']    ?? 0);
+        $comments  = (int)($vi['statistics']['commentCount'] ?? 0);
+        $top_videos[] = [
+            'title'       => $title,
+            'video_id'    => $vid,
+            'url'         => 'https://www.youtube.com/watch?v=' . $vid,
+            'views'       => (int)$row[1],
+            'likes'       => $likes,
+            'comments'    => $comments,
+            'ctr'         => round((float)($row[3] ?? 0) * 100, 1),
+            'retention'   => round((float)($row[4] ?? 0), 1),
+            'watch_hours' => round((int)($row[2] ?? 0) / 60, 1),
+        ];
+    }
 }
-usort($top_videos, fn($a, $b) => $b['views'] <=> $a['views']);
 
 // ── 4. Sources de trafic ──
 $traffic = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
@@ -154,7 +171,7 @@ $output = [
     'retention'        => ['avg' => $retention, 'change_pct' => 0.0],
     'chart'            => ['labels' => $chart_labels, 'data' => $chart_data],
     'monthly_views'    => ['labels' => $chart_labels, 'data' => $chart_data],
-    'top_videos'       => array_slice($top_videos, 0, 10),
+    'top_videos'       => $top_videos,
     'traffic_sources'  => ['labels' => $src_labels, 'data' => $src_data],
     'recommendations'  => $recos,
 ];

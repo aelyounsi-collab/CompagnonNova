@@ -83,7 +83,7 @@ page_open('YouTube Analytics', 'youtube');
 
 <!-- Top Vidéos -->
 <div class="section">
-  <div class="section-title">Top Vidéos — Lifetime</div>
+  <div class="section-title" id="top-videos-title">Top Vidéos — <?= htmlspecialchars($d['meta']['period'] ?? 'Lifetime') ?></div>
   <div class="table-card" id="top-videos-table">
     <table>
       <thead>
@@ -215,7 +215,9 @@ async function syncPeriod(start, end, label) {
     // Mise à jour graphiques
     initCharts(s.chart.labels, s.chart.data, s.traffic_sources.labels, s.traffic_sources.data);
 
-    // Mise à jour top vidéos
+    // Mise à jour titre + top vidéos
+    const titleEl = document.getElementById('top-videos-title');
+    if (titleEl) titleEl.textContent = `Top Vidéos — ${s.meta.period}`;
     const tbody = document.getElementById('top-videos-body');
     tbody.innerHTML = '';
     if (s.top_videos.length === 0) {
