@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Les gencives de votre chien — CompagnonNova</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
     --navy: #0B0F1A;
     --gold: #C9A84C;
@@ -15,16 +13,20 @@
     --red: #E63946;
     --gray: #8892A4;
   }
-
   body {
     width: 1080px;
     height: 1920px;
     background: var(--navy);
     font-family: 'Roboto', sans-serif;
     overflow: hidden;
-    position: relative;
   }
-
+  #root {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: var(--navy);
+  }
   .bg-gradient {
     position: absolute;
     inset: 0;
@@ -32,101 +34,74 @@
       radial-gradient(ellipse 800px 600px at 50% 30%, rgba(201,168,76,0.08) 0%, transparent 70%),
       radial-gradient(ellipse 600px 400px at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 60%);
   }
-
   .top-bar {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 6px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
-
   .brand {
     position: absolute;
     top: 80px; left: 0; right: 0;
     text-align: center;
   }
   .brand-name {
-    font-size: 38px;
-    font-weight: 300;
-    letter-spacing: 10px;
-    color: var(--gold);
+    font-size: 38px; font-weight: 300;
+    letter-spacing: 10px; color: var(--gold);
     text-transform: uppercase;
   }
   .brand-tagline {
-    font-size: 20px;
-    color: var(--gray);
-    letter-spacing: 3px;
-    margin-top: 8px;
+    font-size: 20px; color: var(--gray);
+    letter-spacing: 3px; margin-top: 8px;
     text-transform: uppercase;
   }
-
   .divider {
     position: absolute;
     top: 210px; left: 50%; transform: translateX(-50%);
     width: 60px; height: 2px;
     background: var(--gold);
   }
-
   .badge-urgence {
     position: absolute;
     top: 250px; left: 50%; transform: translateX(-50%);
-    background: var(--red);
-    color: var(--white);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    padding: 10px 32px;
-    border-radius: 4px;
-    text-transform: uppercase;
+    background: var(--red); color: var(--white);
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 3px; padding: 10px 32px;
+    border-radius: 4px; text-transform: uppercase;
     white-space: nowrap;
   }
-
   .question-block {
     position: absolute;
     top: 360px; left: 80px; right: 80px;
   }
   .question-label {
-    font-size: 24px;
-    color: var(--gold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 24px; color: var(--gold);
+    letter-spacing: 2px; text-transform: uppercase;
     margin-bottom: 20px;
   }
   .question-text {
-    font-size: 72px;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.1;
+    font-size: 72px; font-weight: 800;
+    color: var(--white); line-height: 1.1;
   }
-  .question-text em {
-    color: var(--gold);
-    font-style: normal;
-  }
-
+  .question-text em { color: var(--gold); font-style: normal; }
   .emoji-central {
     position: absolute;
     top: 760px; left: 50%; transform: translateX(-50%);
     font-size: 160px;
   }
-
   .signes-block {
     position: absolute;
     top: 960px; left: 60px; right: 60px;
   }
   .signes-title {
-    font-size: 26px;
-    color: var(--gold);
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 32px;
+    font-size: 26px; color: var(--gold);
+    font-weight: 600; letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 32px;
     text-align: center;
   }
   .signe-item {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 22px 28px;
+    display: flex; align-items: center;
+    gap: 24px; padding: 22px 28px;
     margin-bottom: 16px;
     background: rgba(255,255,255,0.04);
     border-left: 4px solid var(--gold);
@@ -135,150 +110,159 @@
   .signe-icon { font-size: 36px; min-width: 48px; }
   .signe-text { font-size: 34px; color: var(--white); font-weight: 500; line-height: 1.2; }
   .signe-text span { color: var(--red); font-weight: 700; }
-
   .alerte-msg {
     position: absolute;
     top: 1520px; left: 60px; right: 60px;
     background: rgba(230,57,70,0.12);
     border: 1px solid rgba(230,57,70,0.4);
-    border-radius: 12px;
-    padding: 32px 36px;
+    border-radius: 12px; padding: 32px 36px;
     text-align: center;
   }
-  .alerte-msg p {
-    font-size: 34px;
-    color: var(--white);
-    line-height: 1.5;
-  }
+  .alerte-msg p { font-size: 34px; color: var(--white); line-height: 1.5; }
   .alerte-msg strong { color: var(--red); }
-
   .subtitle-track {
     position: absolute;
     bottom: 240px; left: 40px; right: 40px;
     text-align: center;
   }
   .subtitle-word {
-    display: inline-block;
-    font-size: 44px;
-    font-weight: 700;
-    color: var(--white);
+    display: inline-block; font-size: 44px;
+    font-weight: 700; color: var(--white);
     background: rgba(11,15,26,0.85);
-    padding: 6px 12px;
-    margin: 4px;
-    border-radius: 4px;
-    line-height: 1.4;
+    padding: 6px 12px; margin: 4px;
+    border-radius: 4px; line-height: 1.4;
   }
   .subtitle-word.highlight { color: var(--gold); }
-
   .cta-block {
     position: absolute;
     bottom: 80px; left: 60px; right: 60px;
     text-align: center;
   }
   .cta-follow {
-    font-size: 30px;
-    color: var(--gray);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 30px; color: var(--gray);
+    letter-spacing: 2px; text-transform: uppercase;
     margin-bottom: 16px;
   }
-  .cta-handle {
-    font-size: 52px;
-    font-weight: 800;
-    color: var(--gold);
-    letter-spacing: 2px;
-  }
-  .cta-line {
-    width: 80px; height: 3px;
-    background: var(--gold);
-    margin: 20px auto 0;
-    border-radius: 2px;
-  }
+  .cta-handle { font-size: 52px; font-weight: 800; color: var(--gold); letter-spacing: 2px; }
+  .cta-line { width: 80px; height: 3px; background: var(--gold); margin: 20px auto 0; border-radius: 2px; }
 </style>
 </head>
 <body>
 
 <div
+  id="root"
   class="clip"
   data-composition
   data-composition-id="gencives-chien"
   data-width="1080"
   data-height="1920"
-  data-duration="6"
+  data-duration="8"
   data-fps="30"
   data-start="0"
-  style="position:relative;width:1080px;height:1920px;overflow:hidden;background:#0B0F1A;"
 >
+  <div class="bg-gradient"></div>
+  <div class="top-bar"></div>
 
-<div class="bg-gradient"></div>
-<div class="top-bar"></div>
+  <div class="brand" id="brand">
+    <div class="brand-name">CompagnonNova</div>
+    <div class="brand-tagline">Santé animale · Chiens &amp; Chats</div>
+  </div>
 
-<div class="brand">
-  <div class="brand-name">CompagnonNova</div>
-  <div class="brand-tagline">Santé animale · Chiens &amp; Chats</div>
-</div>
+  <div class="divider" id="divider"></div>
+  <div class="badge-urgence" id="badge">⚠️ Signe d'alerte</div>
 
-<div class="divider"></div>
-<div class="badge-urgence">⚠️ Signe d'alerte</div>
+  <div class="question-block" id="question">
+    <div class="question-label">Le saviez-vous ?</div>
+    <div class="question-text">
+      Les <em>gencives</em> de votre chien peuvent révéler une <em>maladie grave</em>
+    </div>
+  </div>
 
-<div class="question-block">
-  <div class="question-label">Le saviez-vous ?</div>
-  <div class="question-text">
-    Les <em>gencives</em> de votre chien peuvent révéler une <em>maladie grave</em>
+  <div class="emoji-central" id="emoji">🐾</div>
+
+  <div class="signes-block" id="signes">
+    <div class="signes-title">Gencives anormales = danger</div>
+    <div class="signe-item" id="s1">
+      <div class="signe-icon">⬜</div>
+      <div class="signe-text">Blanches ou pâles → <span>anémie, hémorragie</span></div>
+    </div>
+    <div class="signe-item" id="s2">
+      <div class="signe-icon">💛</div>
+      <div class="signe-text">Jaunes → <span>problème hépatique</span></div>
+    </div>
+    <div class="signe-item" id="s3">
+      <div class="signe-icon">🔵</div>
+      <div class="signe-text">Bleues ou violettes → <span>manque d'oxygène URGENT</span></div>
+    </div>
+    <div class="signe-item" id="s4">
+      <div class="signe-icon">🔴</div>
+      <div class="signe-text">Rouge vif ou marron → <span>septicémie possible</span></div>
+    </div>
+  </div>
+
+  <div class="alerte-msg" id="alerte">
+    <p>Gencives normales = <strong>roses et humides</strong><br>
+    Si couleur anormale &gt; 30 min → <strong>vétérinaire immédiatement</strong></p>
+  </div>
+
+  <div class="subtitle-track" id="subtitles">
+    <span class="subtitle-word">Vérifiez</span>
+    <span class="subtitle-word highlight">chaque semaine</span>
+    <span class="subtitle-word">les gencives</span>
+    <span class="subtitle-word">de votre</span>
+    <span class="subtitle-word highlight">compagnon</span>
+  </div>
+
+  <div class="cta-block" id="cta">
+    <div class="cta-follow">Suivez-nous pour plus de conseils</div>
+    <div class="cta-handle">@CompagnonNova</div>
+    <div class="cta-line"></div>
   </div>
 </div>
 
-<div class="emoji-central">🐾</div>
-
-<div class="signes-block">
-  <div class="signes-title">Gencives anormales = danger</div>
-  <div class="signe-item">
-    <div class="signe-icon">⬜</div>
-    <div class="signe-text">Blanches ou pâles → <span>anémie, hémorragie</span></div>
-  </div>
-  <div class="signe-item">
-    <div class="signe-icon">💛</div>
-    <div class="signe-text">Jaunes → <span>problème hépatique</span></div>
-  </div>
-  <div class="signe-item">
-    <div class="signe-icon">🔵</div>
-    <div class="signe-text">Bleues ou violettes → <span>manque d'oxygène URGENT</span></div>
-  </div>
-  <div class="signe-item">
-    <div class="signe-icon">🔴</div>
-    <div class="signe-text">Rouge vif ou marron → <span>septicémie possible</span></div>
-  </div>
-</div>
-
-<div class="alerte-msg">
-  <p>Gencives normales = <strong>roses et humides</strong><br>
-  Si couleur anormale &gt; 30 min → <strong>vétérinaire immédiatement</strong></p>
-</div>
-
-<div class="subtitle-track">
-  <span class="subtitle-word">Vérifiez</span>
-  <span class="subtitle-word highlight">chaque semaine</span>
-  <span class="subtitle-word">les gencives</span>
-  <span class="subtitle-word">de votre</span>
-  <span class="subtitle-word highlight">compagnon</span>
-</div>
-
-<div class="cta-block">
-  <div class="cta-follow">Suivez-nous pour plus de conseils</div>
-  <div class="cta-handle">@CompagnonNova</div>
-  <div class="cta-line"></div>
-</div>
-
+<!-- GSAP via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-  window.__timelines = window.__timelines || {};
-  window.__timelines['gencives-chien'] = {
-    duration: 6,
-    fps: 30,
-    width: 1080,
-    height: 1920
-  };
-</script>
+(function () {
+  const DURATION = 8;
+  const FPS      = 30;
+  const ID       = 'gencives-chien';
 
-</div><!-- /data-composition-id="gencives-chien" -->
+  // ── Masquer tous les éléments animés au départ ──
+  const els = ['#brand','#divider','#badge','#question','#emoji',
+                '#signes','#s1','#s2','#s3','#s4','#alerte','#subtitles','#cta'];
+  gsap.set(els, { opacity: 0, y: 30 });
+  gsap.set('#emoji', { opacity: 0, scale: 0.3, y: 0 });
+
+  // ── Timeline GSAP principale ──
+  const tl = gsap.timeline({ paused: true });
+
+  tl.to('#brand',      { opacity: 1, y: 0, duration: 0.5 }, 0.3)
+    .to('#divider',    { opacity: 1, y: 0, duration: 0.3 }, 0.7)
+    .to('#badge',      { opacity: 1, y: 0, duration: 0.4 }, 0.9)
+    .to('#question',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.2)
+    .to('#emoji',      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.0)
+    .to('#signes',     { opacity: 1, y: 0, duration: 0.4 }, 2.5)
+    .to('#s1',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 2.7)
+    .to('#s2',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.0)
+    .to('#s3',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.3)
+    .to('#s4',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.6)
+    .to('#alerte',     { opacity: 1, y: 0, duration: 0.5 }, 4.2)
+    .to('#subtitles',  { opacity: 1, y: 0, duration: 0.4 }, 5.0)
+    .to('#cta',        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 5.8);
+
+  // ── Enregistrement HyperFrames ──
+  window.__timelines = window.__timelines || {};
+  window.__timelines[ID] = tl;
+
+  // ── Pilotage par HyperFrames (render frame par frame) ──
+  if (typeof window.__hf !== 'undefined') {
+    window.__hf.onTimeUpdate(function (t) { tl.seek(t); });
+  } else {
+    // Prévisualisation navigateur : jouer normalement
+    tl.play();
+  }
+})();
+</script>
 </body>
 </html>
