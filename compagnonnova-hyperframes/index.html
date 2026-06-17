@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CompagnonNova — HyperFrames</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1920px; background: #0B0F1A; overflow: hidden; font-family: Roboto, Arial, sans-serif; }
+  #root { position: relative; width: 1080px; height: 1920px; display: flex; align-items: center; justify-content: center; }
+  h1 { color: #C9A84C; font-size: 48px; text-align: center; letter-spacing: 6px; }
+</style>
+</head>
+<body>
+<div
+  id="root"
+  class="clip"
+  data-composition
+  data-composition-id="compagnonnova-index"
+  data-width="1080"
+  data-height="1920"
+  data-duration="1"
+  data-fps="30"
+  data-start="0"
+>
+  <h1>COMPAGNONNOVA</h1>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  window.__timelines['compagnonnova-index'] = { duration: 1, fps: 30, width: 1080, height: 1920 };
+</script>
+</body>
+</html>
