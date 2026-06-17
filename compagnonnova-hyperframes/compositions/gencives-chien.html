@@ -211,7 +211,7 @@
 </div>
 
 <script>
-window.addEventListener('load', function () {
+document.addEventListener('DOMContentLoaded', function () {
   var tl = gsap.timeline({ paused: true });
 
   tl.to('#brand',   { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },           0.2)
@@ -226,6 +226,9 @@ window.addEventListener('load', function () {
     .to('#s4',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           3.5)
     .to('#alerte',  { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },           4.1)
     .to('#cta',     { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },           5.6);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['gencives-chien'] = tl;
 
   if (typeof window.__hf === 'undefined') {
     tl.play();
