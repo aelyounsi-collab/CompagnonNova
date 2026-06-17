@@ -2,11 +2,6 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1080, height=1920">
-<meta name="hf:duration" content="6">
-<meta name="hf:width" content="1080">
-<meta name="hf:height" content="1920">
-<meta name="hf:fps" content="30">
 <title>Les gencives de votre chien — CompagnonNova</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,7 +23,6 @@
     position: relative;
   }
 
-  /* ── Fond dégradé ── */
   .bg-gradient {
     position: absolute;
     inset: 0;
@@ -37,23 +31,17 @@
       radial-gradient(ellipse 600px 400px at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 60%);
   }
 
-  /* ── Ligne dorée top ── */
   .top-bar {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 6px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0;
-    animation: fadeIn 0.5s 0.2s forwards;
   }
 
-  /* ── Logo / marque ── */
   .brand {
     position: absolute;
     top: 80px; left: 0; right: 0;
     text-align: center;
-    opacity: 0;
-    animation: slideDown 0.6s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
   }
   .brand-name {
     font-size: 38px;
@@ -70,17 +58,13 @@
     text-transform: uppercase;
   }
 
-  /* ── Séparateur ── */
   .divider {
     position: absolute;
     top: 210px; left: 50%; transform: translateX(-50%);
     width: 60px; height: 2px;
     background: var(--gold);
-    opacity: 0;
-    animation: fadeIn 0.4s 0.8s forwards;
   }
 
-  /* ── Badge urgence ── */
   .badge-urgence {
     position: absolute;
     top: 250px; left: 50%; transform: translateX(-50%);
@@ -92,16 +76,12 @@
     padding: 10px 32px;
     border-radius: 4px;
     text-transform: uppercase;
-    opacity: 0;
-    animation: slideDown 0.5s 1.0s cubic-bezier(0.22,1,0.36,1) forwards;
+    white-space: nowrap;
   }
 
-  /* ── Question principale ── */
   .question-block {
     position: absolute;
     top: 360px; left: 80px; right: 80px;
-    opacity: 0;
-    animation: slideUp 0.7s 1.3s cubic-bezier(0.22,1,0.36,1) forwards;
   }
   .question-label {
     font-size: 24px;
@@ -121,21 +101,15 @@
     font-style: normal;
   }
 
-  /* ── Emoji central ── */
   .emoji-central {
     position: absolute;
     top: 760px; left: 50%; transform: translateX(-50%);
     font-size: 160px;
-    opacity: 0;
-    animation: popIn 0.6s 2.0s cubic-bezier(0.34,1.56,0.64,1) forwards;
   }
 
-  /* ── Signes d'alerte ── */
   .signes-block {
     position: absolute;
     top: 960px; left: 60px; right: 60px;
-    opacity: 0;
-    animation: slideUp 0.6s 2.4s cubic-bezier(0.22,1,0.36,1) forwards;
   }
   .signes-title {
     font-size: 26px;
@@ -155,18 +129,11 @@
     background: rgba(255,255,255,0.04);
     border-left: 4px solid var(--gold);
     border-radius: 0 8px 8px 0;
-    opacity: 0;
-    animation: slideRight 0.5s forwards;
   }
-  .signe-item:nth-child(2) { animation-delay: 2.7s; }
-  .signe-item:nth-child(3) { animation-delay: 2.9s; }
-  .signe-item:nth-child(4) { animation-delay: 3.1s; }
-  .signe-item:nth-child(5) { animation-delay: 3.3s; }
   .signe-icon { font-size: 36px; min-width: 48px; }
   .signe-text { font-size: 34px; color: var(--white); font-weight: 500; line-height: 1.2; }
   .signe-text span { color: var(--red); font-weight: 700; }
 
-  /* ── Message alerte ── */
   .alerte-msg {
     position: absolute;
     top: 1520px; left: 60px; right: 60px;
@@ -175,8 +142,6 @@
     border-radius: 12px;
     padding: 32px 36px;
     text-align: center;
-    opacity: 0;
-    animation: fadeIn 0.6s 3.6s forwards;
   }
   .alerte-msg p {
     font-size: 34px;
@@ -185,13 +150,10 @@
   }
   .alerte-msg strong { color: var(--red); }
 
-  /* ── Sous-titres dynamiques ── */
   .subtitle-track {
     position: absolute;
     bottom: 240px; left: 40px; right: 40px;
     text-align: center;
-    opacity: 0;
-    animation: fadeIn 0.5s 4.2s forwards;
   }
   .subtitle-word {
     display: inline-block;
@@ -206,13 +168,10 @@
   }
   .subtitle-word.highlight { color: var(--gold); }
 
-  /* ── CTA Final ── */
   .cta-block {
     position: absolute;
     bottom: 80px; left: 60px; right: 60px;
     text-align: center;
-    opacity: 0;
-    animation: slideUp 0.7s 4.5s cubic-bezier(0.22,1,0.36,1) forwards;
   }
   .cta-follow {
     font-size: 30px;
@@ -233,32 +192,21 @@
     margin: 20px auto 0;
     border-radius: 2px;
   }
-
-  /* ── Animations ── */
-  @keyframes fadeIn    { to { opacity: 1; } }
-  @keyframes slideDown { from { opacity:0; transform: translateY(-30px); } to { opacity:1; transform: translateY(0); } }
-  @keyframes slideUp   { from { opacity:0; transform: translateY(40px);  } to { opacity:1; transform: translateY(0); } }
-  @keyframes slideRight{ from { opacity:0; transform: translateX(-30px); } to { opacity:1; transform: translateX(0); } }
-  @keyframes popIn     { from { opacity:0; transform: translateX(-50%) scale(0.5); } to { opacity:1; transform: translateX(-50%) scale(1); } }
 </style>
 </head>
-<body>
+<body data-composition data-width="1080" data-height="1920" data-duration="6" data-fps="30">
 
 <div class="bg-gradient"></div>
 <div class="top-bar"></div>
 
-<!-- Marque -->
 <div class="brand">
   <div class="brand-name">CompagnonNova</div>
   <div class="brand-tagline">Santé animale · Chiens &amp; Chats</div>
 </div>
 
 <div class="divider"></div>
-
-<!-- Badge -->
 <div class="badge-urgence">⚠️ Signe d'alerte</div>
 
-<!-- Question -->
 <div class="question-block">
   <div class="question-label">Le saviez-vous ?</div>
   <div class="question-text">
@@ -266,13 +214,10 @@
   </div>
 </div>
 
-<!-- Emoji -->
 <div class="emoji-central">🐾</div>
 
-<!-- Signes cliniques -->
 <div class="signes-block">
   <div class="signes-title">Gencives anormales = danger</div>
-
   <div class="signe-item">
     <div class="signe-icon">⬜</div>
     <div class="signe-text">Blanches ou pâles → <span>anémie, hémorragie</span></div>
@@ -291,13 +236,11 @@
   </div>
 </div>
 
-<!-- Message alerte -->
 <div class="alerte-msg">
   <p>Gencives normales = <strong>roses et humides</strong><br>
-  Si une couleur anormale persiste &gt; 30 min → <strong>vétérinaire immédiatement</strong></p>
+  Si couleur anormale &gt; 30 min → <strong>vétérinaire immédiatement</strong></p>
 </div>
 
-<!-- Sous-titres dynamiques -->
 <div class="subtitle-track">
   <span class="subtitle-word">Vérifiez</span>
   <span class="subtitle-word highlight">chaque semaine</span>
@@ -306,12 +249,17 @@
   <span class="subtitle-word highlight">compagnon</span>
 </div>
 
-<!-- CTA -->
 <div class="cta-block">
   <div class="cta-follow">Suivez-nous pour plus de conseils</div>
   <div class="cta-handle">@CompagnonNova</div>
   <div class="cta-line"></div>
 </div>
 
+<script>
+  // Enregistrement du timing HyperFrames
+  if (typeof window.__time === 'undefined') {
+    window.__time = 0;
+  }
+</script>
 </body>
 </html>
