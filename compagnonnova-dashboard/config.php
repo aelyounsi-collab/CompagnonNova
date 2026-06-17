@@ -2,6 +2,7 @@
 define('CN_VERSION', '1.0.0');
 define('CN_TITLE', 'CompagnonNova');
 define('DATA_PATH', __DIR__ . '/data/');
+define('BASE_URL', '/compagnonnova-dashboard');
 
 function loadData(string $name): array {
     $path = DATA_PATH . $name . '.json';
@@ -37,14 +38,15 @@ function badge_priority(string $p): string {
 }
 
 function render_sidebar(string $active = 'home'): void {
+    $base = BASE_URL;
     $links = [
-        ['href' => '../index.php',          'icon' => '📊', 'label' => 'Vue Globale',    'id' => 'home'],
-        ['href' => '../pages/youtube.php',  'icon' => '▶️',  'label' => 'YouTube',        'id' => 'youtube'],
-        ['href' => '../pages/tiktok.php',   'icon' => '🎵', 'label' => 'TikTok',         'id' => 'tiktok'],
-        ['href' => '../pages/instagram.php','icon' => '📸', 'label' => 'Instagram',      'id' => 'instagram'],
-        ['href' => '../pages/facebook.php', 'icon' => '👥', 'label' => 'Facebook',       'id' => 'facebook'],
-        ['href' => '../pages/growth.php',   'icon' => '🚀', 'label' => 'Growth Lab',     'id' => 'growth'],
-        ['href' => '../pages/sync.php',     'icon' => '🔄', 'label' => 'Synchronisation','id' => 'sync'],
+        ['href' => "$base/index.php",          'icon' => '📊', 'label' => 'Vue Globale',    'id' => 'home'],
+        ['href' => "$base/pages/youtube.php",  'icon' => '▶️',  'label' => 'YouTube',        'id' => 'youtube'],
+        ['href' => "$base/pages/tiktok.php",   'icon' => '🎵', 'label' => 'TikTok',         'id' => 'tiktok'],
+        ['href' => "$base/pages/instagram.php",'icon' => '📸', 'label' => 'Instagram',      'id' => 'instagram'],
+        ['href' => "$base/pages/facebook.php", 'icon' => '👥', 'label' => 'Facebook',       'id' => 'facebook'],
+        ['href' => "$base/pages/growth.php",   'icon' => '🚀', 'label' => 'Growth Lab',     'id' => 'growth'],
+        ['href' => "$base/pages/sync.php",     'icon' => '🔄', 'label' => 'Synchronisation','id' => 'sync'],
     ];
     echo '<nav class="sidebar">';
     echo '<div class="sidebar-logo"><span class="logo-icon">🐾</span><span class="logo-text">CompagnonNova</span></div>';
@@ -59,12 +61,12 @@ function render_sidebar(string $active = 'home'): void {
 }
 
 function page_open(string $title, string $active = 'home'): void {
-    $root = $active === 'home' ? './' : '../';
+    $base = BASE_URL;
     echo '<!DOCTYPE html><html lang="fr"><head>';
     echo '<meta charset="UTF-8">';
     echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
     echo "<title>$title — CompagnonNova</title>";
-    echo "<link rel=\"stylesheet\" href=\"{$root}assets/css/style.css\">";
+    echo "<link rel=\"stylesheet\" href=\"{$base}/assets/css/style.css\">";
     echo '<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>';
     echo '</head><body>';
     render_sidebar($active);
@@ -72,8 +74,9 @@ function page_open(string $title, string $active = 'home'): void {
     echo "<div class=\"page-header\"><h1>$title</h1></div>";
 }
 
-function page_close(string $jsRoot = './'): void {
+function page_close(): void {
+    $base = BASE_URL;
     echo '</main>';
-    echo "<script src=\"{$jsRoot}assets/js/charts.js\"></script>";
+    echo "<script src=\"{$base}/assets/js/charts.js\"></script>";
     echo '</body></html>';
 }
