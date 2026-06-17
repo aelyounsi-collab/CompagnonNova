@@ -1,0 +1,30 @@
+{
+  "meta": { "period": "Juin 2026", "updated": "2026-06-17" },
+  "fans": { "total": 280, "new": 68, "change_pct": 32.1 },
+  "organic_reach": { "total": 12400, "change_pct": 28.4 },
+  "viral_reach": { "total": 4800, "change_pct": 61.3 },
+  "shares": { "total": 320, "change_pct": 44.8 },
+  "comments": { "total": 198, "change_pct": 22.9 },
+  "engagement_rate": { "value": 3.2, "change_pct": 0.4 },
+  "monthly_reach": {
+    "labels": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
+    "data":   [2800, 4100, 6200, 8700, 11200, 17200]
+  },
+  "top_posts": [
+    { "title": "⚠️ Processionnaire du pin : danger mortel pour votre chien","reach": 4200, "shares": 98, "comments": 47 },
+    { "title": "Mon chien boite : que faire en attendant le vétérinaire ?",  "reach": 3100, "shares": 72, "comments": 38 },
+    { "title": "Aliments toxiques : la liste complète à imprimer et garder",  "reach": 2400, "shares": 61, "comments": 29 },
+    { "title": "Quiz : connaissez-vous les signes de douleur chez votre chat ?","reach": 1800,"shares": 54, "comments": 52 },
+    { "title": "Témoignage : Maely raconte comment Peanut a failli avaler...",  "reach": 900, "shares": 35, "comments": 32 }
+  ],
+  "reach_split": {
+    "labels": ["Organique", "Viral", "Payant"],
+    "data":   [72, 28, 0]
+  },
+  "recommendations": [
+    { "priority": "haute",   "text": "Les posts avec CTA 'Partagez pour protéger' génèrent 3x plus de viral reach" },
+    { "priority": "haute",   "text": "Publier les Reels Instagram en natif sur Facebook : +40% de portée" },
+    { "priority": "moyenne", "text": "Créer un groupe Facebook 'Santé Animale — CompagnonNova' pour la communauté" },
+    { "priority": "basse",   "text": "Tester les Facebook Lives mensuels avec questions/réponses vétérinaires" }
+  ]
+}

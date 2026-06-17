@@ -1,0 +1,32 @@
+{
+  "meta": { "period": "Juin 2026", "updated": "2026-06-17" },
+  "followers": { "total": 1240, "new": 380, "change_pct": 44.2 },
+  "views": { "total": 52400, "change_pct": 67.8 },
+  "completion_rate": { "avg": 62.3, "change_pct": 5.4 },
+  "favorites": { "total": 2840, "change_pct": 52.1 },
+  "shares": { "total": 1120, "change_pct": 38.9 },
+  "comments": { "total": 487, "change_pct": 29.4 },
+  "monthly_views": {
+    "labels": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
+    "data":   [8200, 11400, 18700, 27300, 38900, 52400]
+  },
+  "top_videos": [
+    { "title": "3 signes que votre chien a mal 🐕",             "views": 18400, "completion": 74.2, "shares": 420 },
+    { "title": "⚠️ Ce fruit tue les chats",                    "views": 12700, "completion": 71.8, "shares": 310 },
+    { "title": "Ton chien fait ça ? Va chez le véto maintenant","views": 9840,  "completion": 68.4, "shares": 198 },
+    { "title": "Processionnaire du pin : DANGER MORTEL 🌲",      "views": 7200,  "completion": 65.1, "shares": 142 },
+    { "title": "Aliments interdits pour chiens — LISTE COMPLÈTE","views": 4260,  "completion": 60.3, "shares": 50  }
+  ],
+  "hooks_performance": [
+    { "hook": "Ton chien fait ça ? C'est URGENT.",     "avg_completion": 74.2 },
+    { "hook": "⚠️ Ce que 90% des propriétaires ignorent","avg_completion": 71.8 },
+    { "hook": "STOP — avant de faire ça avec ton animal","avg_completion": 68.9 },
+    { "hook": "3 signes à ne JAMAIS ignorer",           "avg_completion": 66.4 }
+  ],
+  "recommendations": [
+    { "priority": "haute",   "text": "Dupliquer le format '3 signes' : meilleur taux de complétion moyen (74.2%)" },
+    { "priority": "haute",   "text": "Poster entre 18h-20h : +23% de reach constaté sur cette tranche" },
+    { "priority": "moyenne", "text": "Ajouter un CTA vocal à 80% de la vidéo pour augmenter les favoris" },
+    { "priority": "basse",   "text": "Tester les sous-titres colorés pour booster les partages" }
+  ]
+}
