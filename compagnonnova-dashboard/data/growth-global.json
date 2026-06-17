@@ -1,34 +1,23 @@
 {
   "meta": { "period": "Juin 2026", "updated": "2026-06-17" },
-  "total_views": { "total": 111740, "change_pct": 48.6 },
-  "new_followers": { "total": 680, "change_pct": 38.2 },
-  "best_platform": "TikTok",
-  "best_subject": "Signes de douleur",
+  "total_views": { "total": 0, "change_pct": 0.0 },
+  "new_followers": { "total": 0, "change_pct": 0.0 },
+  "best_platform": "N/A",
+  "best_subject": "N/A",
   "platform_share": {
     "labels": ["YouTube", "TikTok", "Instagram", "Facebook"],
-    "data":   [17, 47, 25, 11],
+    "data":   [25, 25, 25, 25],
     "colors": ["#FF0000", "#69C9D0", "#E1306C", "#1877F2"]
   },
   "monthly_growth": {
-    "labels": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
-    "youtube":   [4200,  5100,  6800,  9200,  13800, 18540],
-    "tiktok":    [8200,  11400, 18700, 27300, 38900, 52400],
-    "instagram": [5200,  7800,  11400, 16200, 21900, 28400],
-    "facebook":  [2800,  4100,  6200,  8700,  11200, 17200]
+    "labels":    ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
+    "youtube":   [0, 0, 0, 0, 0, 0],
+    "tiktok":    [0, 0, 0, 0, 0, 0],
+    "instagram": [0, 0, 0, 0, 0, 0],
+    "facebook":  [0, 0, 0, 0, 0, 0]
   },
-  "top_subjects": [
-    { "subject": "Signes de douleur",     "total_views": 36460, "platforms": 4 },
-    { "subject": "Aliments toxiques",     "total_views": 28240, "platforms": 4 },
-    { "subject": "Processionnaire",       "total_views": 19760, "platforms": 4 },
-    { "subject": "Urgences vétérinaires", "total_views": 14320, "platforms": 3 },
-    { "subject": "Vaccination",           "total_views": 8640,  "platforms": 2 }
-  ],
-  "experiments": [
-    { "id": "EXP-YT-001", "hypothesis": "Miniatures avec visage humain +20% CTR",       "status": "en cours",  "result": null },
-    { "id": "EXP-TK-001", "hypothesis": "Hook question vs affirmation : meilleure complétion","status": "terminé", "result": "+8.4% complétion avec question" },
-    { "id": "EXP-IG-001", "hypothesis": "Carrousel checklist vs Reel : meilleurs saves",  "status": "terminé", "result": "+140% saves avec carrousel" },
-    { "id": "EXP-FB-001", "hypothesis": "Publication native vs lien YouTube",             "status": "en cours",  "result": null }
-  ],
+  "top_subjects": [],
+  "experiments": [],
   "weekly_actions": [
     { "day": "Lundi",    "task": "Collecte analytics toutes plateformes" },
     { "day": "Mardi",    "task": "Analyse IA (agents Claude) + rapport hebdo" },

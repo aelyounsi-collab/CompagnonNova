@@ -1,29 +1,20 @@
 {
   "meta": { "period": "Juin 2026", "updated": "2026-06-17" },
-  "followers": { "total": 620, "new": 145, "change_pct": 30.5 },
-  "reach": { "total": 28400, "change_pct": 41.2 },
-  "saves": { "total": 890, "change_pct": 55.8 },
-  "shares": { "total": 420, "change_pct": 33.1 },
-  "engagement_rate": { "value": 4.8, "change_pct": 0.6 },
+  "followers": { "total": 0, "new": 0, "change_pct": 0.0 },
+  "reach": { "total": 0, "change_pct": 0.0 },
+  "saves": { "total": 0, "change_pct": 0.0 },
+  "shares": { "total": 0, "change_pct": 0.0 },
+  "engagement_rate": { "value": 0.0, "change_pct": 0.0 },
   "monthly_reach": {
     "labels": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
-    "data":   [5200, 7800, 11400, 16200, 21900, 28400]
+    "data":   [0, 0, 0, 0, 0, 0]
   },
-  "top_reels": [
-    { "title": "Signes de douleur chez le chien 🐕",       "reach": 9200, "saves": 312, "shares": 148 },
-    { "title": "Fruits toxiques pour les chats 🍇",         "reach": 7400, "saves": 267, "shares": 102 },
-    { "title": "Processionnaire : que faire ? 🌲",          "reach": 5800, "saves": 198, "shares": 87  },
-    { "title": "Calendrier vaccinations chien 2026",        "reach": 3900, "saves": 71,  "shares": 52  },
-    { "title": "5 plantes dangereuses pour votre chat 🌿",  "reach": 2100, "saves": 42,  "shares": 31  }
-  ],
+  "top_reels": [],
   "content_mix": {
     "labels": ["Reels", "Carrousels", "Stories", "Posts"],
-    "data":   [58, 24, 12, 6]
+    "data":   [0, 0, 0, 0]
   },
   "recommendations": [
-    { "priority": "haute",   "text": "Les Reels génèrent 58% du reach — augmenter cadence à 5/semaine" },
-    { "priority": "haute",   "text": "Créer des carrousels 'checklist' : taux de sauvegarde x2.4 vs post simple" },
-    { "priority": "moyenne", "text": "Utiliser les Stories pour relayer les nouveaux Reels (boost algorithme)" },
-    { "priority": "basse",   "text": "Tester la fonctionnalité Collab pour doubler la portée" }
+    { "priority": "basse", "text": "Configurez META_ACCESS_TOKEN dans config-api.php pour synchroniser Instagram." }
   ]
 }

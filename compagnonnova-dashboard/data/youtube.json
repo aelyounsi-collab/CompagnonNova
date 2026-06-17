@@ -1,29 +1,20 @@
 {
   "meta": { "period": "Juin 2026", "updated": "2026-06-17" },
-  "subscribers": { "total": 342, "new": 87, "lost": 12, "net": 75, "change_pct": 28.1 },
-  "views": { "total": 18540, "change_pct": 34.2 },
-  "watch_time_hours": { "total": 412, "change_pct": 22.5 },
-  "ctr": { "value": 6.2, "change_pct": 0.8 },
-  "retention": { "avg": 52.4, "change_pct": 3.1 },
+  "subscribers": { "total": 0, "new": 0, "lost": 0, "net": 0, "change_pct": 0.0 },
+  "views": { "total": 0, "change_pct": 0.0 },
+  "watch_time_hours": { "total": 0, "change_pct": 0.0 },
+  "ctr": { "value": 0.0, "change_pct": 0.0 },
+  "retention": { "avg": 0.0, "change_pct": 0.0 },
   "monthly_views": {
     "labels": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun"],
-    "data":   [4200, 5100, 6800, 9200, 13800, 18540]
+    "data":   [0, 0, 0, 0, 0, 0]
   },
-  "top_videos": [
-    { "title": "Signes de douleur chez le chien",      "views": 4820, "ctr": 8.1, "retention": 61.2 },
-    { "title": "Aliments toxiques pour les chats",     "views": 3940, "ctr": 7.4, "retention": 58.7 },
-    { "title": "Urgence : mon chien a avalé du xylitol","views": 3120, "ctr": 6.9, "retention": 55.4 },
-    { "title": "Processionnaire du pin : danger mortel","views": 2760, "ctr": 6.2, "retention": 52.1 },
-    { "title": "Vaccination : calendrier complet chien","views": 1840, "ctr": 5.8, "retention": 49.3 }
-  ],
+  "top_videos": [],
   "traffic_sources": {
     "labels": ["Recherche", "Suggestions", "Externe", "Abonnés", "Autres"],
-    "data":   [42, 31, 14, 9, 4]
+    "data":   [0, 0, 0, 0, 0]
   },
   "recommendations": [
-    { "priority": "haute",   "text": "Optimiser les miniatures : CTR moyen 6.2% — tester visages + texte rouge" },
-    { "priority": "haute",   "text": "Créer une playlist Urgences vétérinaires — boost rétention attendu +8%" },
-    { "priority": "moyenne", "text": "Publier 2 Shorts/semaine liés aux vidéos longues pour capturer de nouveaux abonnés" },
-    { "priority": "basse",   "text": "Ajouter chapitres (timestamps) dans les descriptions pour améliorer la rétention" }
+    { "priority": "basse", "text": "Cliquez Synchroniser YouTube pour charger vos vraies données." }
   ]
 }
