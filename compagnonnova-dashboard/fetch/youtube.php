@@ -11,11 +11,16 @@ if (!$token) {
     exit;
 }
 
-$end        = date('Y-m-d');
-$start_month= date('Y-m-01');
-$start_90   = date('Y-m-d', strtotime('-90 days'));
-$start_all  = '2020-01-01';
-$month      = date('M Y');
+// ── Période dynamique ──
+$end   = isset($_GET['end'])   && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET['end'])   ? $_GET['end']   : date('Y-m-d');
+$start = isset($_GET['start']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET['start']) ? $_GET['start'] : date('Y-m-01');
+
+// Sécurité : start ne peut pas être avant 2020 ni après end
+if ($start > $end) $start = date('Y-m-01');
+if ($start < '2020-01-01') $start = '2020-01-01';
+
+// Label de la période
+$period_label = isset($_GET['label']) ? htmlspecialchars($_GET['label']) : "Du $start au $end";
 
 // ── 1. Stats chaîne (lifetime) ──
 $channel = api_get('https://www.googleapis.com/youtube/v3/channels', [
@@ -31,64 +36,39 @@ $subscribers_total = (int)($stats['subscriberCount'] ?? 0);
 $views_lifetime    = (int)($stats['viewCount']       ?? 0);
 $videos_count      = (int)($stats['videoCount']      ?? 0);
 
-// ── 2. Analytics mois en cours ──
-$ana_month = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
+// ── 2. Analytics sur la période choisie ──
+$ana = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
     'ids'          => 'channel==MINE',
-    'startDate'    => $start_month,
+    'startDate'    => $start,
     'endDate'      => $end,
     'metrics'      => 'views,estimatedMinutesWatched,subscribersGained,subscribersLost,impressions,impressionsClickThroughRate,averageViewPercentage',
     'access_token' => $token,
 ]);
-$rm          = $ana_month['rows'][0] ?? [0,0,0,0,0,0,0];
-$views_month = (int)$rm[0];
-$watch_month = round((int)$rm[1] / 60, 1);
-$subs_gained = (int)$rm[2];
-$subs_lost   = (int)$rm[3];
-$ctr_month   = round((float)($rm[5] ?? 0) * 100, 2);
-$ret_month   = round((float)($rm[6] ?? 0), 1);
+$r           = $ana['rows'][0] ?? [0,0,0,0,0,0,0];
+$views       = (int)$r[0];
+$watch_hours = round((int)$r[1] / 60, 1);
+$subs_gained = (int)$r[2];
+$subs_lost   = (int)$r[3];
+$ctr         = round((float)($r[5] ?? 0) * 100, 2);
+$retention   = round((float)($r[6] ?? 0), 1);
 
-// ── 3. Analytics 90 jours (pour CTR + rétention plus fiables) ──
-$ana_90 = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
-    'ids'          => 'channel==MINE',
-    'startDate'    => $start_90,
-    'endDate'      => $end,
-    'metrics'      => 'views,estimatedMinutesWatched,subscribersGained,impressionsClickThroughRate,averageViewPercentage',
-    'access_token' => $token,
-]);
-$r90        = $ana_90['rows'][0] ?? [0,0,0,0,0];
-$views_90   = (int)$r90[0];
-$watch_90   = round((int)$r90[1] / 60, 1);
-$subs_90    = (int)$r90[2];
-$ctr_90     = round((float)($r90[3] ?? 0) * 100, 2);
-$ret_90     = round((float)($r90[4] ?? 0), 1);
-
-// Utiliser 90j si le mois en cours donne 0
-$ctr_display = $ctr_month > 0 ? $ctr_month : $ctr_90;
-$ret_display = $ret_month > 0 ? $ret_month : $ret_90;
-$views_display = $views_month > 0 ? $views_month : $views_90;
-$watch_display = $watch_month > 0 ? $watch_month : $watch_90;
-$period_label  = $views_month > 0 ? date('M Y') : '90 derniers jours';
-
-// ── 4. Top 10 vidéos (lifetime) ──
+// ── 3. Top 10 vidéos ──
 $search = api_get('https://www.googleapis.com/youtube/v3/search', [
     'part' => 'snippet', 'forMine' => 'true', 'type' => 'video',
     'order' => 'viewCount', 'maxResults' => '10', 'access_token' => $token,
 ]);
-
 $top_videos = [];
 foreach ($search['items'] ?? [] as $item) {
     $vid = $item['id']['videoId'] ?? '';
     if (!$vid) continue;
     $vstat = api_get('https://www.googleapis.com/youtube/v3/videos', [
-        'part' => 'statistics,contentDetails', 'id' => $vid, 'access_token' => $token,
+        'part' => 'statistics', 'id' => $vid, 'access_token' => $token,
     ]);
     $vs = $vstat['items'][0]['statistics'] ?? [];
     $va = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
-        'ids'          => 'channel==MINE',
-        'startDate'    => $start_90,
-        'endDate'      => $end,
-        'filters'      => 'video==' . $vid,
-        'metrics'      => 'views,impressionsClickThroughRate,averageViewPercentage,estimatedMinutesWatched',
+        'ids' => 'channel==MINE', 'startDate' => $start, 'endDate' => $end,
+        'filters' => 'video==' . $vid,
+        'metrics' => 'views,impressionsClickThroughRate,averageViewPercentage,estimatedMinutesWatched',
         'access_token' => $token,
     ]);
     $vr = $va['rows'][0] ?? [0, 0, 0, 0];
@@ -96,7 +76,6 @@ foreach ($search['items'] ?? [] as $item) {
         'title'      => $item['snippet']['title'] ?? '',
         'video_id'   => $vid,
         'url'        => 'https://www.youtube.com/watch?v=' . $vid,
-        'thumbnail'  => $item['snippet']['thumbnails']['medium']['url'] ?? '',
         'views'      => (int)($vs['viewCount'] ?? 0),
         'likes'      => (int)($vs['likeCount']    ?? 0),
         'comments'   => (int)($vs['commentCount'] ?? 0),
@@ -107,79 +86,74 @@ foreach ($search['items'] ?? [] as $item) {
 }
 usort($top_videos, fn($a, $b) => $b['views'] <=> $a['views']);
 
-// ── 5. Sources de trafic (90j) ──
+// ── 4. Sources de trafic ──
 $traffic = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
-    'ids'          => 'channel==MINE',
-    'startDate'    => $start_90,
-    'endDate'      => $end,
-    'dimensions'   => 'insightTrafficSourceType',
-    'metrics'      => 'views',
-    'sort'         => '-views',
-    'maxResults'   => '6',
-    'access_token' => $token,
+    'ids' => 'channel==MINE', 'startDate' => $start, 'endDate' => $end,
+    'dimensions' => 'insightTrafficSourceType', 'metrics' => 'views',
+    'sort' => '-views', 'maxResults' => '6', 'access_token' => $token,
 ]);
-$src_labels = [];
-$src_data   = [];
+$src_labels = []; $src_data = [];
+$src_names = [
+    'YT_SEARCH'=>'Recherche YT','SUGGESTED_VIDEOS'=>'Suggestions',
+    'EXT_URL'=>'Externe','SUBSCRIBER'=>'Abonnés','YT_CHANNEL'=>'Page chaîne',
+    'NO_LINK_OTHER'=>'Autres','SHORTS'=>'Shorts','PLAYLIST'=>'Playlists',
+    'HASHTAGS'=>'Hashtags','YT_OTHER_PAGE'=>'Autres pages YT',
+];
 if (!empty($traffic['rows'])) {
     $total_src = array_sum(array_column($traffic['rows'], 1));
-    $src_names = [
-        'YT_SEARCH'        => 'Recherche YT',
-        'SUGGESTED_VIDEOS' => 'Suggestions',
-        'EXT_URL'          => 'Externe',
-        'SUBSCRIBER'       => 'Abonnés',
-        'YT_CHANNEL'       => 'Page chaîne',
-        'NO_LINK_OTHER'    => 'Autres',
-        'SHORTS'           => 'Shorts',
-        'PLAYLIST'         => 'Playlists',
-        'HASHTAGS'         => 'Hashtags',
-        'YT_OTHER_PAGE'    => 'Autres pages YT',
-    ];
-    foreach ($traffic['rows'] as $r) {
-        $src_labels[] = $src_names[$r[0]] ?? $r[0];
-        $src_data[]   = $total_src > 0 ? round($r[1] / $total_src * 100, 1) : 0;
+    foreach ($traffic['rows'] as $r2) {
+        $src_labels[] = $src_names[$r2[0]] ?? $r2[0];
+        $src_data[]   = $total_src > 0 ? round($r2[1] / $total_src * 100, 1) : 0;
     }
 }
 
-// ── 6. Croissance mensuelle 6 mois ──
-$monthly_labels = [];
-$monthly_data   = [];
-for ($i = 5; $i >= 0; $i--) {
-    $ts = strtotime("-$i months", strtotime($start_month));
-    $mv = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
-        'ids'          => 'channel==MINE',
-        'startDate'    => date('Y-m-01', $ts),
-        'endDate'      => date('Y-m-t', $ts),
-        'metrics'      => 'views',
-        'access_token' => $token,
-    ]);
-    $monthly_labels[] = date('M', $ts);
-    $monthly_data[]   = (int)($mv['rows'][0][0] ?? 0);
+// ── 5. Graphique : vues par jour sur la période ──
+$daily = api_get('https://youtubeanalytics.googleapis.com/v2/reports', [
+    'ids' => 'channel==MINE', 'startDate' => $start, 'endDate' => $end,
+    'dimensions' => 'day', 'metrics' => 'views', 'sort' => 'day',
+    'access_token' => $token,
+]);
+$chart_labels = [];
+$chart_data   = [];
+foreach ($daily['rows'] ?? [] as $row) {
+    $chart_labels[] = date('d/m', strtotime($row[0]));
+    $chart_data[]   = (int)$row[1];
+}
+// Si trop de points (> 60), agréger par semaine
+if (count($chart_labels) > 60) {
+    $wl = []; $wd = []; $tmp = 0; $wk = 1;
+    foreach ($chart_data as $i => $v) {
+        $tmp += $v;
+        if (($i + 1) % 7 === 0 || $i === count($chart_data) - 1) {
+            $wl[] = 'S' . $wk++;
+            $wd[] = $tmp;
+            $tmp  = 0;
+        }
+    }
+    $chart_labels = $wl;
+    $chart_data   = $wd;
 }
 
 // ── Recommandations ──
 $recos = [];
-if ($ctr_display > 0 && $ctr_display < 4)
-    $recos[] = ['priority'=>'haute',   'text'=>"CTR miniatures à {$ctr_display}% : trop bas. Tester des miniatures avec visage + texte choc."];
-elseif ($ctr_display >= 6)
-    $recos[] = ['priority'=>'basse',   'text'=>"CTR excellent à {$ctr_display}% : maintenir le style de miniatures actuel."];
-if ($ret_display > 0 && $ret_display < 35)
-    $recos[] = ['priority'=>'haute',   'text'=>"Rétention à {$ret_display}% : améliorer les 30 premières secondes de chaque vidéo."];
-if ($subs_gained > 5)
-    $recos[] = ['priority'=>'moyenne', 'text'=>"+{$subs_gained} abonnés ce mois : identifier les vidéos qui ont converti."];
-if (!empty($src_labels) && $src_labels[0] === 'Shorts')
-    $recos[] = ['priority'=>'moyenne', 'text'=>"Les Shorts dominent vos sources de trafic. Créez des Shorts qui renvoient vers vos longues vidéos."];
-if (empty($recos))
-    $recos[] = ['priority'=>'basse', 'text'=>'Continuez à publier régulièrement pour améliorer votre référencement.'];
+if ($ctr > 0 && $ctr < 4)    $recos[] = ['priority'=>'haute',   'text'=>"CTR à {$ctr}% : trop bas. Tester miniatures avec visage + texte choc."];
+elseif ($ctr >= 6)            $recos[] = ['priority'=>'basse',   'text'=>"CTR excellent à {$ctr}% : maintenir le style actuel."];
+if ($retention > 0 && $retention < 35) $recos[] = ['priority'=>'haute','text'=>"Rétention à {$retention}% : améliorer les 30 premières secondes."];
+if ($subs_gained > 5)         $recos[] = ['priority'=>'moyenne', 'text'=>"+{$subs_gained} abonnés sur la période : identifier les vidéos qui ont converti."];
+if (!empty($src_labels) && stripos($src_labels[0], 'Short') !== false)
+    $recos[] = ['priority'=>'moyenne', 'text'=>"Les Shorts dominent votre trafic. Créez des Shorts qui renvoient vers vos longues vidéos."];
+if (empty($recos)) $recos[] = ['priority'=>'basse', 'text'=>'Continuez à publier régulièrement pour améliorer votre référencement.'];
 
 $output = [
-    'meta'             => ['period' => $period_label, 'updated' => date('Y-m-d'), 'channel' => $channel_name],
+    'meta'             => ['period' => $period_label, 'start' => $start, 'end' => $end, 'updated' => date('Y-m-d H:i'), 'channel' => $channel_name],
     'channel'          => ['name' => $channel_name, 'videos_count' => $videos_count, 'views_lifetime' => $views_lifetime],
     'subscribers'      => ['total' => $subscribers_total, 'new' => $subs_gained, 'lost' => $subs_lost, 'net' => $subs_gained - $subs_lost, 'change_pct' => 0.0],
-    'views'            => ['total' => $views_display, 'lifetime' => $views_lifetime, 'change_pct' => 0.0],
-    'watch_time_hours' => ['total' => $watch_display, 'change_pct' => 0.0],
-    'ctr'              => ['value' => $ctr_display, 'change_pct' => 0.0],
-    'retention'        => ['avg' => $ret_display, 'change_pct' => 0.0],
-    'monthly_views'    => ['labels' => $monthly_labels, 'data' => $monthly_data],
+    'views'            => ['total' => $views, 'lifetime' => $views_lifetime, 'change_pct' => 0.0],
+    'watch_time_hours' => ['total' => $watch_hours, 'change_pct' => 0.0],
+    'ctr'              => ['value' => $ctr, 'change_pct' => 0.0],
+    'retention'        => ['avg' => $retention, 'change_pct' => 0.0],
+    'chart'            => ['labels' => $chart_labels, 'data' => $chart_data],
+    'monthly_views'    => ['labels' => $chart_labels, 'data' => $chart_data],
     'top_videos'       => array_slice($top_videos, 0, 10),
     'traffic_sources'  => ['labels' => $src_labels, 'data' => $src_data],
     'recommendations'  => $recos,
@@ -189,6 +163,7 @@ file_put_contents(DATA_PATH . 'youtube.json', json_encode($output, JSON_PRETTY_P
 
 echo json_encode([
     'ok'      => true,
-    'message' => "YouTube syncé : {$views_display} vues ({$period_label}), {$subscribers_total} abonnés, " . count($top_videos) . " vidéos.",
+    'message' => "YouTube syncé : {$views} vues sur la période \"{$period_label}\", {$subscribers_total} abonnés.",
     'updated' => date('Y-m-d H:i:s'),
+    'data'    => $output,
 ]);
