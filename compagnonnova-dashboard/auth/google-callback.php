@@ -8,12 +8,6 @@ function redirect_sync(string $msg, string $type = 'error'): void {
     exit;
 }
 
-// Vérification state CSRF
-if (empty($_GET['state']) || $_GET['state'] !== ($_SESSION['oauth_state'] ?? '')) {
-    redirect_sync('Sécurité : state OAuth invalide.');
-}
-unset($_SESSION['oauth_state']);
-
 if (isset($_GET['error'])) {
     redirect_sync('Accès refusé par Google : ' . htmlspecialchars($_GET['error']));
 }
@@ -21,6 +15,14 @@ if (isset($_GET['error'])) {
 if (empty($_GET['code'])) {
     redirect_sync('Code d\'autorisation manquant.');
 }
+
+// Vérification state CSRF (optionnelle si session vide)
+if (!empty($_SESSION['oauth_state']) && !empty($_GET['state'])) {
+    if ($_GET['state'] !== $_SESSION['oauth_state']) {
+        redirect_sync('Sécurité : state OAuth invalide. Veuillez réessayer.');
+    }
+}
+unset($_SESSION['oauth_state']);
 
 // Échange du code contre les tokens
 $ch = curl_init('https://oauth2.googleapis.com/token');
@@ -39,10 +41,9 @@ $resp = json_decode(curl_exec($ch), true);
 curl_close($ch);
 
 if (empty($resp['access_token'])) {
-    redirect_sync('Erreur token Google : ' . ($resp['error_description'] ?? 'inconnue'));
+    redirect_sync('Erreur token Google : ' . ($resp['error_description'] ?? json_encode($resp)));
 }
 
-// Sauvegarde du token
 $token = [
     'access_token'  => $resp['access_token'],
     'refresh_token' => $resp['refresh_token'] ?? null,
@@ -50,6 +51,9 @@ $token = [
     'created_at'    => date('Y-m-d H:i:s'),
 ];
 
-file_put_contents(__DIR__ . '/../tokens/google.json', json_encode($token, JSON_PRETTY_PRINT));
+$tokens_dir = __DIR__ . '/../tokens';
+if (!is_dir($tokens_dir)) mkdir($tokens_dir, 0755, true);
 
-redirect_sync('Compte Google connecté avec succès !', 'success');
+file_put_contents($tokens_dir . '/google.json', json_encode($token, JSON_PRETTY_PRINT));
+
+redirect_sync('Compte Google connecté avec succès ! Vous pouvez maintenant synchroniser YouTube.', 'success');
