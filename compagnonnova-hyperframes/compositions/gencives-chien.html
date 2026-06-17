@@ -12,7 +12,6 @@
     --white: #FFFFFF;
     --red: #E63946;
     --gray: #8892A4;
-    --green: #2D6A4F;
   }
 
   body {
@@ -23,13 +22,12 @@
     overflow: hidden;
   }
 
-  /* ── Fond ── */
   .bg {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 900px 700px at 50% 25%, rgba(201,168,76,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 500px 400px at 85% 85%, rgba(45,106,79,0.06) 0%, transparent 55%);
+      radial-gradient(ellipse 900px 700px at 50% 25%, rgba(201,168,76,0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 500px 400px at 85% 85%, rgba(201,168,76,0.04) 0%, transparent 55%);
   }
 
   .top-bar {
@@ -38,12 +36,10 @@
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
 
-  /* ── Brand ── */
-  #brand {
+  .brand {
     position: absolute;
     top: 72px; left: 0; right: 0;
     text-align: center;
-    opacity: 0;
   }
   .brand-name {
     font-size: 36px; font-weight: 300;
@@ -60,26 +56,21 @@
     position: absolute;
     top: 206px; left: 50%; transform: translateX(-50%);
     width: 56px; height: 2px; background: var(--gold);
-    opacity: 0;
   }
 
-  /* ── Badge ── */
-  #badge {
+  .badge {
     position: absolute;
-    top: 244px; left: 50%;
+    top: 244px; left: 50%; transform: translateX(-50%);
     background: var(--red); color: var(--white);
     font-size: 20px; font-weight: 700;
     letter-spacing: 3px; padding: 10px 30px;
     border-radius: 4px; text-transform: uppercase;
     white-space: nowrap;
-    opacity: 0;
   }
 
-  /* ── Hook ── */
-  #hook {
+  .hook {
     position: absolute;
     top: 348px; left: 72px; right: 72px;
-    opacity: 0;
   }
   .hook-label {
     font-size: 22px; color: var(--gold);
@@ -92,19 +83,15 @@
   }
   .hook-text em { color: var(--gold); font-style: normal; }
 
-  /* ── Icône centrale ── */
-  #icon {
+  .icon {
     position: absolute;
-    top: 740px; left: 50%;
+    top: 740px; left: 50%; transform: translateX(-50%);
     font-size: 150px;
-    opacity: 0;
   }
 
-  /* ── Signes ── */
-  #signes {
+  .signes {
     position: absolute;
     top: 940px; left: 56px; right: 56px;
-    opacity: 0;
   }
   .signes-title {
     font-size: 24px; color: var(--gold);
@@ -119,31 +106,26 @@
     background: rgba(255,255,255,0.04);
     border-left: 4px solid var(--gold);
     border-radius: 0 8px 8px 0;
-    opacity: 0;
   }
   .signe-icon { font-size: 34px; min-width: 44px; }
   .signe-txt { font-size: 32px; color: var(--white); font-weight: 500; line-height: 1.2; }
   .signe-txt b { color: var(--red); font-weight: 700; }
 
-  /* ── Alerte ── */
-  #alerte {
+  .alerte {
     position: absolute;
     top: 1508px; left: 56px; right: 56px;
     background: rgba(230,57,70,0.10);
     border: 1px solid rgba(230,57,70,0.35);
     border-radius: 12px; padding: 28px 32px;
     text-align: center;
-    opacity: 0;
   }
   .alerte-txt { font-size: 32px; color: var(--white); line-height: 1.5; }
   .alerte-txt b { color: var(--red); }
 
-  /* ── CTA ── */
-  #cta {
+  .cta {
     position: absolute;
     bottom: 64px; left: 56px; right: 56px;
     text-align: center;
-    opacity: 0;
   }
   .cta-label {
     font-size: 26px; color: var(--gray);
@@ -171,69 +153,44 @@
   <div class="bg"></div>
   <div class="top-bar"></div>
 
-  <div id="brand">
+  <div class="brand">
     <div class="brand-name">CompagnonNova</div>
     <div class="brand-sub">Santé animale · Chiens &amp; Chats</div>
   </div>
 
-  <div class="divider" id="divider"></div>
-  <div id="badge">⚠️ Signe d'alerte</div>
+  <div class="divider"></div>
+  <div class="badge">⚠️ Signe d'alerte</div>
 
-  <div id="hook">
+  <div class="hook">
     <div class="hook-label">Le saviez-vous ?</div>
     <div class="hook-text">
       Les <em>gencives</em> de votre chien peuvent révéler une <em>maladie grave</em>
     </div>
   </div>
 
-  <div id="icon">🐾</div>
+  <div class="icon">🐾</div>
 
-  <div id="signes">
+  <div class="signes">
     <div class="signes-title">Gencives anormales = danger</div>
-    <div class="signe" id="s1"><div class="signe-icon">⬜</div><div class="signe-txt">Blanches ou pâles → <b>anémie, hémorragie</b></div></div>
-    <div class="signe" id="s2"><div class="signe-icon">💛</div><div class="signe-txt">Jaunes → <b>problème hépatique</b></div></div>
-    <div class="signe" id="s3"><div class="signe-icon">🔵</div><div class="signe-txt">Bleues ou violettes → <b>manque d'oxygène URGENT</b></div></div>
-    <div class="signe" id="s4"><div class="signe-icon">🔴</div><div class="signe-txt">Rouge vif → <b>septicémie possible</b></div></div>
+    <div class="signe"><div class="signe-icon">⬜</div><div class="signe-txt">Blanches ou pâles → <b>anémie, hémorragie</b></div></div>
+    <div class="signe"><div class="signe-icon">💛</div><div class="signe-txt">Jaunes → <b>problème hépatique</b></div></div>
+    <div class="signe"><div class="signe-icon">🔵</div><div class="signe-txt">Bleues ou violettes → <b>manque d'oxygène URGENT</b></div></div>
+    <div class="signe"><div class="signe-icon">🔴</div><div class="signe-txt">Rouge vif → <b>septicémie possible</b></div></div>
   </div>
 
-  <div id="alerte">
+  <div class="alerte">
     <p class="alerte-txt">
       Gencives saines = <b>roses et humides</b><br>
       Couleur anormale &gt; 30 min → <b>vétérinaire immédiatement</b>
     </p>
   </div>
 
-  <div id="cta">
+  <div class="cta">
     <div class="cta-label">Abonnez-vous pour plus de conseils</div>
     <div class="cta-handle">@CompagnonNova</div>
     <div class="cta-line"></div>
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var tl = gsap.timeline({ paused: true });
-
-  tl.to('#brand',   { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },           0.2)
-    .to('#divider', { opacity: 1, duration: 0.3 },                                      0.6)
-    .fromTo('#badge', { xPercent: -50, opacity: 0, y: 20 }, { xPercent: -50, opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 0.8)
-    .to('#hook',    { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },           1.1)
-    .fromTo('#icon', { xPercent: -50, opacity: 0, scale: 0.4 }, { xPercent: -50, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 1.9)
-    .to('#signes',  { opacity: 1, y: 0, duration: 0.4 },                               2.4)
-    .to('#s1',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           2.6)
-    .to('#s2',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           2.9)
-    .to('#s3',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           3.2)
-    .to('#s4',      { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },           3.5)
-    .to('#alerte',  { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },           4.1)
-    .to('#cta',     { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },           5.6);
-
-  window.__timelines = window.__timelines || {};
-  window.__timelines['gencives-chien'] = tl;
-
-  if (typeof window.__hf === 'undefined') {
-    tl.play();
-  }
-});
-</script>
 </body>
 </html>
