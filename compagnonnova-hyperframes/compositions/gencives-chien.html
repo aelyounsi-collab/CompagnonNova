@@ -144,6 +144,18 @@
   }
   .cta-handle { font-size: 52px; font-weight: 800; color: var(--gold); letter-spacing: 2px; }
   .cta-line { width: 80px; height: 3px; background: var(--gold); margin: 20px auto 0; border-radius: 2px; }
+
+  /* États initiaux — cachés avant animation GSAP */
+  #brand, #divider, #badge, #question,
+  #signes, #s1, #s2, #s3, #s4,
+  #alerte, #subtitles, #cta {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  #emoji {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.3);
+  }
 </style>
 </head>
 <body>
@@ -222,47 +234,29 @@
 
 <script>
 (function () {
-  var ID = 'gencives-chien';
+  // HyperFrames injecte gsap et enregistre les timelines automatiquement.
+  // États initiaux définis en CSS — pas de gsap.set() ici.
+  // window.__timelines n'est pas enregistré manuellement.
 
-  var els = ['#brand','#divider','#badge','#question','#emoji',
-             '#signes','#s1','#s2','#s3','#s4','#alerte','#subtitles','#cta'];
+  var tl = gsap.timeline({ paused: true });
 
-  // HyperFrames injecte gsap — on attend qu'il soit disponible
-  function init() {
-    gsap.set(els, { opacity: 0, y: 30 });
-    gsap.set('#emoji', { opacity: 0, scale: 0.3, y: 0 });
+  tl.to('#brand',      { opacity: 1, y: 0, duration: 0.5 },                     0.3)
+    .to('#divider',    { opacity: 1, y: 0, duration: 0.3 },                     0.7)
+    .to('#badge',      { opacity: 1, y: 0, duration: 0.4 },                     0.9)
+    .to('#question',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.2)
+    .to('#emoji',      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.0)
+    .to('#signes',     { opacity: 1, y: 0, duration: 0.4 },                     2.5)
+    .to('#s1',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 2.7)
+    .to('#s2',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.0)
+    .to('#s3',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.3)
+    .to('#s4',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 3.6)
+    .to('#alerte',     { opacity: 1, y: 0, duration: 0.5 },                     4.2)
+    .to('#subtitles',  { opacity: 1, y: 0, duration: 0.4 },                     5.0)
+    .to('#cta',        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 5.8);
 
-    var tl = gsap.timeline({ paused: true });
-
-    tl.to('#brand',      { opacity: 1, y: 0, duration: 0.5 },                    0.3)
-      .to('#divider',    { opacity: 1, y: 0, duration: 0.3 },                    0.7)
-      .to('#badge',      { opacity: 1, y: 0, duration: 0.4 },                    0.9)
-      .to('#question',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },1.2)
-      .to('#emoji',      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.0)
-      .to('#signes',     { opacity: 1, y: 0, duration: 0.4 },                    2.5)
-      .to('#s1',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },2.7)
-      .to('#s2',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.0)
-      .to('#s3',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.3)
-      .to('#s4',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.6)
-      .to('#alerte',     { opacity: 1, y: 0, duration: 0.5 },                    4.2)
-      .to('#subtitles',  { opacity: 1, y: 0, duration: 0.4 },                    5.0)
-      .to('#cta',        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },5.8);
-
-    // HyperFrames pilote la timeline via window.__timelines
-    window.__timelines = window.__timelines || {};
-    window.__timelines[ID] = tl;
-
-    // Prévisualisation navigateur uniquement (hors render HyperFrames)
-    if (typeof window.__hf === 'undefined') {
-      tl.play();
-    }
-  }
-
-  // gsap est injecté par HyperFrames avant DOMContentLoaded
-  if (typeof gsap !== 'undefined') {
-    init();
-  } else {
-    document.addEventListener('DOMContentLoaded', init);
+  // Prévisualisation navigateur uniquement (HyperFrames pilote la timeline en render)
+  if (typeof window.__hf === 'undefined') {
+    tl.play();
   }
 })();
 </script>
