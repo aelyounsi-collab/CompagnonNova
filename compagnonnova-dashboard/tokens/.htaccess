@@ -1,0 +1,3 @@
+# Protege les tokens OAuth contre l'acces direct
+Order deny,allow
+Deny from all
