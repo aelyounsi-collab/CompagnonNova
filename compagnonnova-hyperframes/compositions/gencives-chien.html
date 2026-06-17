@@ -87,7 +87,6 @@
     position: absolute;
     top: 760px; left: 50%; transform: translateX(-50%);
     font-size: 160px;
-    transform-origin: center center;
   }
   .signes-block {
     position: absolute;
@@ -223,89 +222,47 @@
 
 <script>
 (function () {
-  var DURATION = 8;
   var ID = 'gencives-chien';
 
-  // ── Définition des keyframes par élément ──
-  // Chaque entrée : { id, startT, dur, fromY, toY, fromScale, toScale }
-  var ANIMS = [
-    { id: 'brand',     startT: 0.3, dur: 0.5, fromY: 30, toY: 0 },
-    { id: 'divider',   startT: 0.7, dur: 0.3, fromY: 30, toY: 0 },
-    { id: 'badge',     startT: 0.9, dur: 0.4, fromY: 30, toY: 0 },
-    { id: 'question',  startT: 1.2, dur: 0.6, fromY: 30, toY: 0 },
-    { id: 'emoji',     startT: 2.0, dur: 0.5, fromY: 0,  toY: 0, fromScale: 0.3, toScale: 1 },
-    { id: 'signes',    startT: 2.5, dur: 0.4, fromY: 30, toY: 0 },
-    { id: 's1',        startT: 2.7, dur: 0.35,fromY: 30, toY: 0 },
-    { id: 's2',        startT: 3.0, dur: 0.35,fromY: 30, toY: 0 },
-    { id: 's3',        startT: 3.3, dur: 0.35,fromY: 30, toY: 0 },
-    { id: 's4',        startT: 3.6, dur: 0.35,fromY: 30, toY: 0 },
-    { id: 'alerte',    startT: 4.2, dur: 0.5, fromY: 30, toY: 0 },
-    { id: 'subtitles', startT: 5.0, dur: 0.4, fromY: 30, toY: 0 },
-    { id: 'cta',       startT: 5.8, dur: 0.6, fromY: 30, toY: 0 }
-  ];
+  var els = ['#brand','#divider','#badge','#question','#emoji',
+             '#signes','#s1','#s2','#s3','#s4','#alerte','#subtitles','#cta'];
 
-  // Cache des éléments DOM
-  var elMap = {};
-  ANIMS.forEach(function (a) {
-    elMap[a.id] = document.getElementById(a.id);
-  });
+  // HyperFrames injecte gsap — on attend qu'il soit disponible
+  function init() {
+    gsap.set(els, { opacity: 0, y: 30 });
+    gsap.set('#emoji', { opacity: 0, scale: 0.3, y: 0 });
 
-  // Easing power2.out
-  function easeOut(p) { return 1 - (1 - p) * (1 - p); }
+    var tl = gsap.timeline({ paused: true });
 
-  // ── Appliquer l'état visuel au temps t ──
-  function applyTime(t) {
-    ANIMS.forEach(function (a) {
-      var el = elMap[a.id];
-      if (!el) return;
+    tl.to('#brand',      { opacity: 1, y: 0, duration: 0.5 },                    0.3)
+      .to('#divider',    { opacity: 1, y: 0, duration: 0.3 },                    0.7)
+      .to('#badge',      { opacity: 1, y: 0, duration: 0.4 },                    0.9)
+      .to('#question',   { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },1.2)
+      .to('#emoji',      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }, 2.0)
+      .to('#signes',     { opacity: 1, y: 0, duration: 0.4 },                    2.5)
+      .to('#s1',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },2.7)
+      .to('#s2',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.0)
+      .to('#s3',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.3)
+      .to('#s4',         { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },3.6)
+      .to('#alerte',     { opacity: 1, y: 0, duration: 0.5 },                    4.2)
+      .to('#subtitles',  { opacity: 1, y: 0, duration: 0.4 },                    5.0)
+      .to('#cta',        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },5.8);
 
-      var p = (t - a.startT) / a.dur;
-      p = Math.max(0, Math.min(1, p));
-      var ep = easeOut(p);
+    // HyperFrames pilote la timeline via window.__timelines
+    window.__timelines = window.__timelines || {};
+    window.__timelines[ID] = tl;
 
-      el.style.opacity = ep;
-
-      var y = (a.fromY || 0) + ((a.toY || 0) - (a.fromY || 0)) * ep;
-      var fromS = a.fromScale !== undefined ? a.fromScale : 1;
-      var toS   = a.toScale   !== undefined ? a.toScale   : 1;
-      var s = fromS + (toS - fromS) * ep;
-
-      if (a.id === 'emoji') {
-        el.style.transform = 'translateX(-50%) scale(' + s + ')';
-      } else {
-        el.style.transform = 'translateY(' + y + 'px)';
-      }
-    });
+    // Prévisualisation navigateur uniquement (hors render HyperFrames)
+    if (typeof window.__hf === 'undefined') {
+      tl.play();
+    }
   }
 
-  // ── État initial (tout invisible) ──
-  applyTime(0);
-
-  // ── Enregistrement HyperFrames ──
-  // Objet compatible avec ce qu'HyperFrames attend : { duration, seek }
-  var tlProxy = {
-    duration: function () { return DURATION; },
-    seek: function (t) { applyTime(t); },
-    // Compatibilité si HyperFrames lit .totalDuration()
-    totalDuration: function () { return DURATION; }
-  };
-
-  window.__timelines = window.__timelines || {};
-  window.__timelines[ID] = tlProxy;
-
-  // ── Pilotage HyperFrames (render frame par frame) ──
-  if (typeof window.__hf !== 'undefined') {
-    window.__hf.onTimeUpdate(function (t) { applyTime(t); });
+  // gsap est injecté par HyperFrames avant DOMContentLoaded
+  if (typeof gsap !== 'undefined') {
+    init();
   } else {
-    // Prévisualisation navigateur : animation via requestAnimationFrame
-    var startTime = null;
-    function tick(now) {
-      if (!startTime) startTime = now;
-      var elapsed = (now - startTime) / 1000;
-      applyTime(Math.min(elapsed, DURATION));
-      if (elapsed < DURATION) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
+    document.addEventListener('DOMContentLoaded', init);
   }
 })();
 </script>
