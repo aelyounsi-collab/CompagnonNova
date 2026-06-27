@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gospel Lip Sync Studio",
-  description: "Professional lip-sync workflow optimized for gospel singing — powered by AI",
+  title: "HitsLyrics — Lip Sync Studio",
+  description: "Professional lip-sync workflow optimized for singing — powered by AI",
 };
 
 export default function RootLayout({

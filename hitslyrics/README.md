@@ -1,6 +1,6 @@
-# 🎙️ Gospel Lip Sync Studio
+# 🎙️ HitsLyrics — Lip Sync Studio
 
-A professional web application for creating AI-powered lip-sync videos optimized for gospel singing.  
+A professional web application for creating AI-powered lip-sync videos — gospel, R&B, pop, and more.  
 Upload a portrait image and an audio file — the app analyzes vocal intensity, segments the track, and prepares a lip-sync job ready for AI engine connection.
 
 ---

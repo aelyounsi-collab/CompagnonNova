@@ -38,7 +38,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
           <Link href="/" className="text-sm text-zinc-500 hover:text-amber-400 transition-colors">
             ← Back to Studio
           </Link>
-          <h1 className="text-lg font-bold text-amber-400">Gospel Lip Sync Studio</h1>
+          <h1 className="text-lg font-bold text-amber-400">HitsLyrics</h1>
         </div>
 
         <StepIndicator currentStep="generate" />
